@@ -43,7 +43,7 @@ class Dr_Khaste_Leitner {
 		$all_cards = get_posts( array(
 			'post_type'   => 'flashcard',
 			'meta_key'    => '_mcp_topic_id',
-			'meta_value'  => $topic_id,
+			'meta_value'  => absint( $topic_id ),
 			'numberposts' => -1,
 			'orderby'     => 'date',
 			'order'       => 'ASC',
@@ -52,8 +52,8 @@ class Dr_Khaste_Leitner {
 		$progress_rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT card_id, next_review FROM $table WHERE user_id = %d AND box_id = %d",
-				$user_id,
-				$topic_id
+				absint( $user_id ),
+				absint( $topic_id )
 			),
 			OBJECT_K
 		);
@@ -101,8 +101,8 @@ class Dr_Khaste_Leitner {
 
 		$exists = $wpdb->get_var( $wpdb->prepare(
 			"SELECT id FROM $table WHERE user_id = %d AND card_id = %d",
-			$user_id,
-			$card_id
+			absint( $user_id ),
+			absint( $card_id )
 		) );
 
 		if ( $exists ) {
@@ -110,10 +110,10 @@ class Dr_Khaste_Leitner {
 				$table,
 				array(
 					'next_review' => $next_review,
-					'last_status' => $status,
-					'box_id'      => $topic_id,
+					'last_status' => absint( $status ),
+					'box_id'      => absint( $topic_id ),
 				),
-				array( 'id' => $exists ),
+				array( 'id' => absint( $exists ) ),
 				array( '%s', '%d', '%d' ),
 				array( '%d' )
 			);
@@ -121,11 +121,11 @@ class Dr_Khaste_Leitner {
 			return $wpdb->insert(
 				$table,
 				array(
-					'user_id'     => $user_id,
-					'card_id'     => $card_id,
-					'box_id'      => $topic_id,
+					'user_id'     => absint( $user_id ),
+					'card_id'     => absint( $card_id ),
+					'box_id'      => absint( $topic_id ),
 					'next_review' => $next_review,
-					'last_status' => $status,
+					'last_status' => absint( $status ),
 				),
 				array( '%d', '%d', '%d', '%s', '%d' )
 			);
@@ -133,6 +133,9 @@ class Dr_Khaste_Leitner {
 	}
 
 	public static function ajax_record_progress() {
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( array( 'message' => 'User not logged in' ) );
+		}
 		check_ajax_referer( 'mcp_leitner_nonce', 'nonce' );
 
 		$user_id  = get_current_user_id();
@@ -149,6 +152,9 @@ class Dr_Khaste_Leitner {
 	}
 
 	public static function render_admin_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( 'Access denied.' );
+		}
 		global $wpdb;
 		$table = $wpdb->prefix . 'sl_user_progress';
 		$count = $wpdb->get_var( "SELECT COUNT(*) FROM $table" );

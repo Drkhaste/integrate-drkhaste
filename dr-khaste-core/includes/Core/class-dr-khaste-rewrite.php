@@ -8,33 +8,12 @@ class Dr_Khaste_Rewrite {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'add_rewrite_rules' ) );
 		add_filter( 'query_vars', array( __CLASS__, 'register_query_vars' ) );
-		add_action( 'template_redirect', array( __CLASS__, 'handle_redirects_and_templates' ) );
+		add_action( 'template_redirect', array( __CLASS__, 'handle_routing_and_templates' ) );
 		add_filter( 'post_type_link', array( __CLASS__, 'filter_post_links' ), 10, 2 );
 	}
 
 	public static function add_rewrite_rules() {
-		// Leitner study route
-		add_rewrite_rule(
-			'^leitner/([^/]+)/([^/]+)/([^/]+)/?$',
-			'index.php?mcp_leitner_study=1&course_slug=$matches[1]&lesson_slug=$matches[2]&topic_slug=$matches[3]',
-			'top'
-		);
-
-		// Mindmap routes
-		add_rewrite_rule(
-			'^mindmap/([^/]+)/([^/]+)/([^/]+)/?$',
-			'index.php?dr_khaste_mindmap=1&course_slug=$matches[1]&lesson_slug=$matches[2]&topic_slug=$matches[3]',
-			'top'
-		);
-
-		// Tests routes
-		add_rewrite_rule(
-			'^tests/([^/]+)/([^/]+)/([^/]+)/?$',
-			'index.php?dr_khaste_topic_tests=1&course_slug=$matches[1]&lesson_slug=$matches[2]&topic_slug=$matches[3]',
-			'top'
-		);
-
-		// Central course/lesson/topic canonical routes
+		// Canonical hierarchy URLs
 		add_rewrite_rule(
 			'^course/([^/]+)/([^/]+)/([^/]+)/?$',
 			'index.php?post_type=topic&course_slug=$matches[1]&lesson_slug=$matches[2]&name=$matches[3]',
@@ -50,12 +29,29 @@ class Dr_Khaste_Rewrite {
 			'index.php?post_type=course&name=$matches[1]',
 			'top'
 		);
+
+		// Module routes
+		add_rewrite_rule(
+			'^leitner/([^/]+)/([^/]+)/([^/]+)/?$',
+			'index.php?mcp_leitner_study=1&course_slug=$matches[1]&lesson_slug=$matches[2]&topic_slug=$matches[3]',
+			'top'
+		);
+		add_rewrite_rule(
+			'^tests/([^/]+)/([^/]+)/([^/]+)/?$',
+			'index.php?dr_khaste_topic_tests=1&course_slug=$matches[1]&lesson_slug=$matches[2]&topic_slug=$matches[3]',
+			'top'
+		);
+		add_rewrite_rule(
+			'^mindmap/([^/]+)/([^/]+)/([^/]+)/?$',
+			'index.php?dr_khaste_mindmap=1&course_slug=$matches[1]&lesson_slug=$matches[2]&topic_slug=$matches[3]',
+			'top'
+		);
 	}
 
 	public static function register_query_vars( $vars ) {
 		$vars[] = 'mcp_leitner_study';
-		$vars[] = 'dr_khaste_mindmap';
 		$vars[] = 'dr_khaste_topic_tests';
+		$vars[] = 'dr_khaste_mindmap';
 		$vars[] = 'course_slug';
 		$vars[] = 'lesson_slug';
 		$vars[] = 'topic_slug';
@@ -89,14 +85,13 @@ class Dr_Khaste_Rewrite {
 		return $post_link;
 	}
 
-	public static function handle_redirects_and_templates() {
-		// Handle 301 Redirects for legacy post types if accessed directly
+	public static function handle_routing_and_templates() {
+		// Handle 301 Redirects for legacy post types
 		if ( is_singular( array( 'mtp_course', 'mtp_lesson', 'mtp_topic', 'mms_course', 'mms_lesson', 'mms_topic' ) ) ) {
 			$post_id = get_queried_object_id();
 			$mapping = Dr_Khaste_Migration::get_mapping();
-
-			$pt = get_post_type( $post_id );
-			$new_id = 0;
+			$pt      = get_post_type( $post_id );
+			$new_id  = 0;
 
 			if ( strpos( $pt, 'course' ) !== false && isset( $mapping['courses'][ $post_id ] ) ) {
 				$new_id = $mapping['courses'][ $post_id ];
