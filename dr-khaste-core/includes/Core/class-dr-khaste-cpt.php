@@ -19,7 +19,7 @@ class Dr_Khaste_CPT {
 			'show_in_menu'        => 'dr_khaste_main_menu',
 			'show_in_nav_menus'   => true,
 			'has_archive'         => false,
-			'capability_type'     => 'post',
+			'capability_type'     => array( 'course', 'courses' ),
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
 			'rewrite'             => false,
@@ -41,7 +41,7 @@ class Dr_Khaste_CPT {
 			'show_in_menu'        => 'dr_khaste_main_menu',
 			'show_in_nav_menus'   => true,
 			'has_archive'         => false,
-			'capability_type'     => 'post',
+			'capability_type'     => array( 'lesson', 'lessons' ),
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
 			'rewrite'             => false,
@@ -63,7 +63,7 @@ class Dr_Khaste_CPT {
 			'show_in_menu'        => 'dr_khaste_main_menu',
 			'show_in_nav_menus'   => true,
 			'has_archive'         => false,
-			'capability_type'     => 'post',
+			'capability_type'     => array( 'topic', 'topics' ),
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
 			'rewrite'             => false,
@@ -85,7 +85,7 @@ class Dr_Khaste_CPT {
 			'show_in_menu'        => 'dr_khaste_main_menu',
 			'show_in_nav_menus'   => true,
 			'has_archive'         => false,
-			'capability_type'     => 'post',
+			'capability_type'     => array( 'test', 'tests' ),
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
 			'rewrite'             => false,
@@ -107,7 +107,7 @@ class Dr_Khaste_CPT {
 			'show_in_menu'        => 'dr_khaste_main_menu',
 			'show_in_nav_menus'   => true,
 			'has_archive'         => false,
-			'capability_type'     => 'post',
+			'capability_type'     => array( 'flashcard', 'flashcards' ),
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
 			'rewrite'             => array( 'slug' => 'flashcard', 'with_front' => true ),
@@ -129,7 +129,7 @@ class Dr_Khaste_CPT {
 			'show_in_menu'        => 'dr_khaste_main_menu',
 			'show_in_nav_menus'   => true,
 			'has_archive'         => false,
-			'capability_type'     => 'post',
+			'capability_type'     => array( 'mindmap', 'mindmaps' ),
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
 			'rewrite'             => array( 'slug' => 'mind-map', 'with_front' => true ),
@@ -147,17 +147,5 @@ class Dr_Khaste_CPT {
 			'show_in_menu'       => 'dr_khaste_main_menu',
 			'supports'           => array( 'title' ),
 		) );
-
-		// Legacy CPTs registered as publicly queryable for redirect handling
-		$legacy_cpts = array( 'mtp_course', 'mtp_lesson', 'mtp_topic', 'mtp_test', 'mms_course', 'mms_lesson', 'mms_topic' );
-		foreach ( $legacy_cpts as $lcpt ) {
-			register_post_type( $lcpt, array(
-				'public'             => true,
-				'publicly_queryable' => true,
-				'show_ui'            => false,
-				'show_in_menu'       => false,
-				'supports'           => array( 'title' ),
-			) );
-		}
 	}
 }

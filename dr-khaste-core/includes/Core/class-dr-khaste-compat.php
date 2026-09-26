@@ -6,37 +6,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Dr_Khaste_Compat {
 
 	public static function init() {
-		// Provide fallback functions if theme or third party plugins call old mcp_*, mtp_*, mms_* functions
+		// Clean unified helper functions
 	}
 }
 
-if ( ! function_exists( 'mcp_get_course_lessons' ) ) {
-	function mcp_get_course_lessons( $course_id ) {
-		return Dr_Khaste_Course::get_course_lessons( $course_id );
+if ( ! function_exists( 'dr_khaste_get_course_lessons' ) ) {
+	function dr_khaste_get_course_lessons( $course_id ) {
+		return Dr_Khaste_Course_Repository::get_lessons( $course_id );
 	}
 }
 
-if ( ! function_exists( 'mcp_get_lesson_topics' ) ) {
-	function mcp_get_lesson_topics( $lesson_id ) {
-		return Dr_Khaste_Lesson::get_lesson_topics( $lesson_id );
+if ( ! function_exists( 'dr_khaste_get_lesson_topics' ) ) {
+	function dr_khaste_get_lesson_topics( $lesson_id ) {
+		return Dr_Khaste_Lesson_Repository::get_topics( $lesson_id );
 	}
 }
 
-if ( ! function_exists( 'mcp_get_topic_flashcards' ) ) {
-	function mcp_get_topic_flashcards( $topic_id ) {
-		return Dr_Khaste_Topic::get_topic_flashcards( $topic_id );
+if ( ! function_exists( 'dr_khaste_get_topic_flashcards' ) ) {
+	function dr_khaste_get_topic_flashcards( $topic_id ) {
+		return Dr_Khaste_Topic_Repository::get_flashcards( $topic_id );
 	}
 }
 
-if ( ! function_exists( 'mtp_get_topic_tests' ) ) {
-	function mtp_get_topic_tests( $topic_id ) {
-		return Dr_Khaste_Topic::get_topic_tests( $topic_id );
+if ( ! function_exists( 'dr_khaste_get_topic_tests' ) ) {
+	function dr_khaste_get_topic_tests( $topic_id ) {
+		return Dr_Khaste_Topic_Repository::get_tests( $topic_id );
 	}
 }
 
-if ( ! function_exists( 'mms_get_topic_mindmaps' ) ) {
-	function mms_get_topic_mindmaps( $topic_id ) {
-		return Dr_Khaste_Topic::get_topic_mindmaps( $topic_id );
+if ( ! function_exists( 'dr_khaste_get_topic_mindmaps' ) ) {
+	function dr_khaste_get_topic_mindmaps( $topic_id ) {
+		return Dr_Khaste_Topic_Repository::get_mindmaps( $topic_id );
 	}
 }
 

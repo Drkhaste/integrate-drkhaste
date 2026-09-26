@@ -20,6 +20,11 @@ class Dr_Khaste_Init {
 	}
 
 	private function includes() {
+		// Repositories (Source of truth)
+		require_once DR_KHASTE_CORE_PATH . 'includes/Course/class-dr-khaste-course-repository.php';
+		require_once DR_KHASTE_CORE_PATH . 'includes/Lesson/class-dr-khaste-lesson-repository.php';
+		require_once DR_KHASTE_CORE_PATH . 'includes/Topic/class-dr-khaste-topic-repository.php';
+
 		// Core
 		require_once DR_KHASTE_CORE_PATH . 'includes/Core/class-dr-khaste-cpt.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/Core/class-dr-khaste-rewrite.php';
@@ -39,8 +44,6 @@ class Dr_Khaste_Init {
 		require_once DR_KHASTE_CORE_PATH . 'includes/Flashcards/class-dr-khaste-flashcards.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/Leitner/class-dr-khaste-leitner.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/MindMaps/class-dr-khaste-mindmaps.php';
-		require_once DR_KHASTE_CORE_PATH . 'includes/ImportExport/class-dr-khaste-import-export.php';
-		require_once DR_KHASTE_CORE_PATH . 'includes/Migration/class-dr-khaste-migration.php';
 	}
 
 	private function init_hooks() {
@@ -50,13 +53,11 @@ class Dr_Khaste_Init {
 	}
 
 	public function on_init() {
-		// Register CPTs and Rewrite rules
 		Dr_Khaste_CPT::register();
 		Dr_Khaste_Rewrite::init();
 	}
 
 	public function enqueue_frontend_assets() {
-		// Performance optimization: Conditionally enqueue styles and scripts only on educational post types/routes
 		if ( is_singular( array( 'course', 'lesson', 'topic', 'test', 'flashcard', 'mms_mind_map' ) ) || get_query_var( 'mcp_leitner_study' ) || get_query_var( 'dr_khaste_topic_tests' ) ) {
 			wp_enqueue_style( 'dr-khaste-fontawesome', DR_KHASTE_CORE_URL . 'assets/vendor/fontawesome/css/all.min.css', array(), DR_KHASTE_CORE_VERSION );
 			wp_enqueue_style( 'dr-khaste-custom', DR_KHASTE_CORE_URL . 'assets/css/custom.css', array(), DR_KHASTE_CORE_VERSION );
@@ -69,16 +70,16 @@ class Dr_Khaste_Init {
 			wp_enqueue_script( 'dr-khaste-leitner-js', DR_KHASTE_CORE_URL . 'assets/js/leitner.js', array( 'jquery' ), DR_KHASTE_CORE_VERSION, true );
 			wp_enqueue_script( 'dr-khaste-accordion-js', DR_KHASTE_CORE_URL . 'assets/js/mcp-accordion.js', array( 'jquery' ), DR_KHASTE_CORE_VERSION, true );
 
-			wp_localize_script( 'dr-khaste-leitner-js', 'mcp_leitner_ajax', array(
+			wp_localize_script( 'dr-khaste-leitner-js', 'dr_khaste_leitner_ajax', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'mcp_leitner_nonce' ),
+				'nonce'    => wp_create_nonce( 'dr_khaste_leitner_nonce' ),
 			) );
 		}
 	}
 
 	public function enqueue_admin_assets( $hook ) {
 		$screen = get_current_screen();
-		if ( $screen && in_array( $screen->post_type, array( 'course', 'lesson', 'topic', 'test', 'flashcard', 'mms_mind_map' ), true ) || strpos( $hook, 'dr_khaste' ) !== false ) {
+		if ( ( $screen && in_array( $screen->post_type, array( 'course', 'lesson', 'topic', 'test', 'flashcard', 'mms_mind_map' ), true ) ) || strpos( $hook, 'dr_khaste' ) !== false ) {
 			wp_enqueue_style( 'dr-khaste-admin-styles', DR_KHASTE_CORE_URL . 'assets/css/admin-styles.css', array(), DR_KHASTE_CORE_VERSION );
 			wp_enqueue_script( 'dr-khaste-admin-scripts', DR_KHASTE_CORE_URL . 'assets/js/admin-scripts.js', array( 'jquery' ), DR_KHASTE_CORE_VERSION, true );
 			wp_enqueue_script( 'dr-khaste-sortable', DR_KHASTE_CORE_URL . 'assets/js/sortable-items.js', array( 'jquery', 'jquery-ui-sortable' ), DR_KHASTE_CORE_VERSION, true );
