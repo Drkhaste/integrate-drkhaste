@@ -30,11 +30,13 @@ class Dr_Khaste_Init {
 		require_once DR_KHASTE_CORE_PATH . 'includes/Core/class-dr-khaste-rewrite.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/Core/class-dr-khaste-compat.php';
 
-		// Admin
+		// Admin & Submenus
 		require_once DR_KHASTE_CORE_PATH . 'includes/Admin/class-dr-khaste-admin-menu.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/Admin/class-dr-khaste-meta-boxes.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/Admin/class-dr-khaste-admin-columns.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/Admin/class-dr-khaste-settings.php';
+		require_once DR_KHASTE_CORE_PATH . 'includes/ImportExport/class-dr-khaste-import-export.php';
+		require_once DR_KHASTE_CORE_PATH . 'includes/Migration/class-dr-khaste-migration.php';
 
 		// Modules
 		require_once DR_KHASTE_CORE_PATH . 'includes/Course/class-dr-khaste-course.php';
@@ -44,6 +46,7 @@ class Dr_Khaste_Init {
 		require_once DR_KHASTE_CORE_PATH . 'includes/Flashcards/class-dr-khaste-flashcards.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/Leitner/class-dr-khaste-leitner.php';
 		require_once DR_KHASTE_CORE_PATH . 'includes/MindMaps/class-dr-khaste-mindmaps.php';
+		require_once DR_KHASTE_CORE_PATH . 'includes/AJAX/class-dr-khaste-ajax.php';
 	}
 
 	private function init_hooks() {
