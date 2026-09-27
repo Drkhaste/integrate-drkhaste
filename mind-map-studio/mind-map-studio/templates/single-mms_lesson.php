@@ -2,7 +2,7 @@
     get_header();
     wp_enqueue_style( 'mms-frontend' );
     $lesson_id = get_the_ID();
-    $course_id = get_post_meta( $lesson_id, '_mms_course_id', true );
+    $course_id = get_post_meta( $lesson_id, '_mcp_course_id', true );
 ?>
 
 <main class="mms-container">
@@ -22,8 +22,8 @@
     <div class="topic-box">
         <?php
         $topics = get_posts([
-            'post_type'  => 'mms_topic',
-            'meta_key'   => '_mms_lesson_id',
+            'post_type'  => 'topic',
+            'meta_key'   => '_mcp_lesson_id',
             'meta_value' => $lesson_id,
             'numberposts' => -1,
             'orderby'    => [ 'menu_order' => 'ASC', 'date' => 'ASC' ],

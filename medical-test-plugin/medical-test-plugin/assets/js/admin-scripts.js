@@ -1,14 +1,14 @@
 jQuery(document).ready(function($) {
     // Dependent dropdowns
-    var postType = $('body').hasClass('post-type-mtp_topic') ? 'topic' : ($('body').hasClass('post-type-mtp_test') ? 'test' : '');
+    var postType = $('body').hasClass('post-type-topic') ? 'topic' : ($('body').hasClass('post-type-mtp_test') ? 'test' : '');
 
     if (postType === 'topic' || postType === 'test') {
-        $('#mtp_course_id').on('change', function() {
+        $('#mcp_course_id').on('change', function() {
             var courseId = $(this).val();
-            var lessonDropdown = $('#mtp_lesson_id');
+            var lessonDropdown = $('#mcp_lesson_id');
             lessonDropdown.empty().append('<option value="">— انتخاب —</option>');
             if (postType === 'test') {
-                $('#mtp_topic_id').empty().append('<option value="">— انتخاب —</option>');
+                $('#mcp_topic_id').empty().append('<option value="">— انتخاب —</option>');
             }
 
             if (courseId) {
@@ -31,9 +31,9 @@ jQuery(document).ready(function($) {
         });
 
         if (postType === 'test') {
-            $('#mtp_lesson_id').on('change', function() {
+            $('#mcp_lesson_id').on('change', function() {
                 var lessonId = $(this).val();
-                var topicDropdown = $('#mtp_topic_id');
+                var topicDropdown = $('#mcp_topic_id');
                 topicDropdown.empty().append('<option value="">— انتخاب —</option>');
 
                 if (lessonId) {

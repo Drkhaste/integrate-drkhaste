@@ -2,8 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 function mtp_add_import_export_menu() {
-    add_submenu_page( 'mtp_main_menu', 'ایمپورت CSV', 'ایمپورت CSV', 'manage_options', 'mtp-csv-import', 'mtp_render_import_page' );
-    add_submenu_page( 'mtp_main_menu', 'اکسپورت CSV', 'اکسپورت CSV', 'manage_options', 'mtp-csv-export', 'mtp_render_export_page' );
+    add_submenu_page( 'course_builder_page', 'ایمپورت CSV', 'ایمپورت CSV', 'manage_options', 'mtp-csv-import', 'mtp_render_import_page' );
+    add_submenu_page( 'course_builder_page', 'اکسپورت CSV', 'اکسپورت CSV', 'manage_options', 'mtp-csv-export', 'mtp_render_export_page' );
 }
 add_action( 'admin_menu', 'mtp_add_import_export_menu' );
 
@@ -48,19 +48,19 @@ function mtp_render_import_page() {
                         <tr>
                             <th scope="row" style="padding: 10px 0; width: 100px;">کورس</th>
                             <td>
-                                <select id="mtp-course" name="mtp_course_id" required style="width: 100%;">
+                                <select id="mtp-course" name="mcp_course_id" required style="width: 100%;">
                                     <option value="">— انتخاب کورس —</option>
-                                    <?php foreach ( get_posts(['post_type' => 'mtp_course', 'numberposts' => -1]) as $c ) echo '<option value="'.$c->ID.'">'.$c->post_title.'</option>'; ?>
+                                    <?php foreach ( get_posts(['post_type' => 'course', 'numberposts' => -1]) as $c ) echo '<option value="'.$c->ID.'">'.$c->post_title.'</option>'; ?>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" style="padding: 10px 0;">درس</th>
-                            <td><select id="mtp-lesson" name="mtp_lesson_id" disabled required style="width: 100%;"><option value="">— انتخاب درس —</option></select></td>
+                            <td><select id="mtp-lesson" name="mcp_lesson_id" disabled required style="width: 100%;"><option value="">— انتخاب درس —</option></select></td>
                         </tr>
                         <tr>
                             <th scope="row" style="padding: 10px 0;">مبحث</th>
-                            <td><select id="mtp-topic" name="mtp_topic_id" disabled required style="width: 100%;"><option value="">— انتخاب مبحث —</option></select></td>
+                            <td><select id="mtp-topic" name="mcp_topic_id" disabled required style="width: 100%;"><option value="">— انتخاب مبحث —</option></select></td>
                         </tr>
                         <tr>
                             <th scope="row" style="padding: 10px 0;">فایل CSV</th>
@@ -169,19 +169,19 @@ function mtp_render_export_page() {
                 <tr>
                     <th scope="row">کورس</th>
                     <td>
-                        <select id="mtp-course" name="mtp_course_id" required>
+                        <select id="mtp-course" name="mcp_course_id" required>
                             <option value="">— انتخاب کورس —</option>
-                            <?php foreach ( get_posts(['post_type' => 'mtp_course', 'numberposts' => -1]) as $c ) echo '<option value="'.$c->ID.'">'.$c->post_title.'</option>'; ?>
+                            <?php foreach ( get_posts(['post_type' => 'course', 'numberposts' => -1]) as $c ) echo '<option value="'.$c->ID.'">'.$c->post_title.'</option>'; ?>
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">درس</th>
-                    <td><select id="mtp-lesson" name="mtp_lesson_id" disabled required><option value="">— انتخاب درس —</option></select></td>
+                    <td><select id="mtp-lesson" name="mcp_lesson_id" disabled required><option value="">— انتخاب درس —</option></select></td>
                 </tr>
                 <tr>
                     <th scope="row">مبحث</th>
-                    <td><select id="mtp-topic" name="mtp_topic_id" disabled required><option value="">— انتخاب مبحث —</option></select></td>
+                    <td><select id="mtp-topic" name="mcp_topic_id" disabled required><option value="">— انتخاب مبحث —</option></select></td>
                 </tr>
             </table>
             <input type="submit" name="mtp_export_submit" class="button button-primary" value="اکسپورت به CSV">
@@ -192,9 +192,9 @@ function mtp_render_export_page() {
 
 function mtp_handle_export_request() {
     if ( ! isset( $_POST['mtp_export_submit'] ) || ! wp_verify_nonce( $_POST['mtp_import_export_nonce'], 'mtp_import_export_action' ) ) return;
-    $topic_id = absint( $_POST['mtp_topic_id'] );
-    $lesson_id = get_post_meta( $topic_id, '_mtp_lesson_id', true );
-    $course_id = get_post_meta( $topic_id, '_mtp_course_id', true );
+    $topic_id = absint( $_POST['mcp_topic_id'] );
+    $lesson_id = get_post_meta( $topic_id, '_mcp_lesson_id', true );
+    $course_id = get_post_meta( $topic_id, '_mcp_course_id', true );
 
     $lesson_title = $lesson_id ? get_the_title( $lesson_id ) : '';
     $course_title = $course_id ? get_the_title( $course_id ) : '';
@@ -204,7 +204,7 @@ function mtp_handle_export_request() {
     $output = fopen( 'php://output', 'w' );
     fprintf( $output, chr(0xEF) . chr(0xBB) . chr(0xBF) );
     fputcsv( $output, [ 'Question Number', 'Exam', 'Date', 'Lesson', 'Subject', 'Question Text', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Options', 'Explanation' ] );
-    $items = get_posts(['post_type' => 'mtp_test', 'meta_key' => '_mtp_topic_id', 'meta_value' => $topic_id, 'numberposts' => -1]);
+    $items = get_posts(['post_type' => 'mtp_test', 'meta_key' => '_mcp_topic_id', 'meta_value' => $topic_id, 'numberposts' => -1]);
     foreach ( $items as $item ) {
         fputcsv( $output, [
             get_post_meta( $item->ID, '_mtp_question_number', true ),
@@ -260,7 +260,7 @@ function mtp_find_or_create_post( $title, $post_type, $parent_meta_key = '', $pa
     ] );
 
     if ( $post_id && ! is_wp_error( $post_id ) ) {
-        update_post_meta( $post_id, '_mtp_english_slug', $slug );
+        update_post_meta( $post_id, '_mcp_english_slug', $slug );
         if ( ! empty( $parent_meta_key ) ) {
             update_post_meta( $post_id, $parent_meta_key, $parent_meta_value );
         }
@@ -321,23 +321,23 @@ function mtp_handle_auto_import_request() {
         }
 
         // 1. Course (from Lesson column)
-        $course_id = mtp_find_or_create_post( $lesson_name, 'mtp_course' );
+        $course_id = mtp_find_or_create_post( $lesson_name, 'course' );
         if ( ! $course_id ) continue;
 
         // 2. Lesson (from Subject column)
-        $lesson_id = mtp_find_or_create_post( $subject_name, 'mtp_lesson', '_mtp_course_id', $course_id );
+        $lesson_id = mtp_find_or_create_post( $subject_name, 'lesson', '_mcp_course_id', $course_id );
         if ( ! $lesson_id ) continue;
 
         // 3. Topic (same as Subject)
-        $topic_id = mtp_find_or_create_post( $subject_name, 'mtp_topic', '_mtp_lesson_id', $lesson_id );
+        $topic_id = mtp_find_or_create_post( $subject_name, 'topic', '_mcp_lesson_id', $lesson_id );
         if ( ! $topic_id ) continue;
-        update_post_meta( $topic_id, '_mtp_course_id', $course_id );
+        update_post_meta( $topic_id, '_mcp_course_id', $course_id );
 
         // Duplicate Check
         $existing_test = get_posts( [
             'post_type'      => 'mtp_test',
             'meta_query'     => [
-                [ 'key' => '_mtp_topic_id', 'value' => $topic_id ],
+                [ 'key' => '_mcp_topic_id', 'value' => $topic_id ],
                 [ 'key' => '_mtp_question', 'value' => wp_kses_post( $question_text ) ],
             ],
             'posts_per_page' => 1,
@@ -368,9 +368,9 @@ function mtp_handle_auto_import_request() {
         ] );
 
         if ( $test_id && ! is_wp_error( $test_id ) ) {
-            update_post_meta( $test_id, '_mtp_topic_id', $topic_id );
-            update_post_meta( $test_id, '_mtp_lesson_id', $lesson_id );
-            update_post_meta( $test_id, '_mtp_course_id', $course_id );
+            update_post_meta( $test_id, '_mcp_topic_id', $topic_id );
+            update_post_meta( $test_id, '_mcp_lesson_id', $lesson_id );
+            update_post_meta( $test_id, '_mcp_course_id', $course_id );
             update_post_meta( $test_id, '_mtp_identifier', sanitize_text_field( $question_number ) );
             update_post_meta( $test_id, '_mtp_question_number', sanitize_text_field( $question_number ) );
             update_post_meta( $test_id, '_mtp_exam', sanitize_text_field( $exam ) );
@@ -393,9 +393,9 @@ add_action( 'init', 'mtp_handle_auto_import_request' );
 function mtp_handle_import_request() {
     if ( ! isset( $_POST['mtp_import_submit'] ) || ! wp_verify_nonce( $_POST['mtp_import_export_nonce'], 'mtp_import_export_action' ) ) return;
     if ( ! isset( $_FILES['mtp_csv_file'] ) || $_FILES['mtp_csv_file']['error'] !== UPLOAD_ERR_OK ) return;
-    $topic_id = absint( $_POST['mtp_topic_id'] );
-    $lesson_id = get_post_meta( $topic_id, '_mtp_lesson_id', true );
-    $course_id = get_post_meta( $topic_id, '_mtp_course_id', true );
+    $topic_id = absint( $_POST['mcp_topic_id'] );
+    $lesson_id = get_post_meta( $topic_id, '_mcp_lesson_id', true );
+    $course_id = get_post_meta( $topic_id, '_mcp_course_id', true );
 
     setlocale( LC_ALL, 'en_US.UTF-8' );
     if ( ( $handle = fopen( $_FILES['mtp_csv_file']['tmp_name'], 'r' ) ) !== false ) {
@@ -433,7 +433,7 @@ function mtp_handle_import_request() {
             $existing_test = get_posts( [
                 'post_type'      => 'mtp_test',
                 'meta_query'     => [
-                    [ 'key' => '_mtp_topic_id', 'value' => $topic_id ],
+                    [ 'key' => '_mcp_topic_id', 'value' => $topic_id ],
                     [ 'key' => '_mtp_question', 'value' => wp_kses_post( $question ) ],
                 ],
                 'posts_per_page' => 1,
@@ -460,9 +460,9 @@ function mtp_handle_import_request() {
                 'post_status' => 'publish'
             ]);
             if ( $post_id ) {
-                update_post_meta( $post_id, '_mtp_topic_id', $topic_id );
-                update_post_meta( $post_id, '_mtp_lesson_id', $lesson_id );
-                update_post_meta( $post_id, '_mtp_course_id', $course_id );
+                update_post_meta( $post_id, '_mcp_topic_id', $topic_id );
+                update_post_meta( $post_id, '_mcp_lesson_id', $lesson_id );
+                update_post_meta( $post_id, '_mcp_course_id', $course_id );
                 update_post_meta( $post_id, '_mtp_identifier', sanitize_text_field( $q_num ) );
                 update_post_meta( $post_id, '_mtp_question_number', sanitize_text_field( $q_num ) );
                 update_post_meta( $post_id, '_mtp_exam', sanitize_text_field( $exam ) );

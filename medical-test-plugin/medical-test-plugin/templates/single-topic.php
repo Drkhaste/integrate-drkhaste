@@ -1,8 +1,8 @@
 <?php
     get_header();
     $topic_id = get_the_ID();
-    $lesson_id = get_post_meta( $topic_id, '_mtp_lesson_id', true );
-    $course_id = $lesson_id ? get_post_meta( $lesson_id, '_mtp_course_id', true ) : null;
+    $lesson_id = get_post_meta( $topic_id, '_mcp_lesson_id', true );
+    $course_id = $lesson_id ? get_post_meta( $lesson_id, '_mcp_course_id', true ) : null;
 ?>
 
 <main class="container">
@@ -25,9 +25,9 @@
     <div class="topic-box" style="background:var(--bg-card); color:var(--text-main); border: 1px solid var(--primary); border-radius:12px; padding:30px; margin-bottom:30px;">
         <h1 style="color:var(--primary); margin-top:0;"><?php the_title(); ?></h1>
         <?php
-            $course_slug = get_post_meta( $course_id, '_mtp_english_slug', true );
-            $lesson_slug = get_post_meta( $lesson_id, '_mtp_english_slug', true );
-            $topic_slug = get_post_meta( $topic_id, '_mtp_english_slug', true );
+            $course_slug = get_post_meta( $course_id, '_mcp_english_slug', true );
+            $lesson_slug = get_post_meta( $lesson_id, '_mcp_english_slug', true );
+            $topic_slug = get_post_meta( $topic_id, '_mcp_english_slug', true );
             $test_url = home_url( "/test/{$course_slug}/{$lesson_slug}/{$topic_slug}/" );
         ?>
         <div style="margin: 20px 0;">

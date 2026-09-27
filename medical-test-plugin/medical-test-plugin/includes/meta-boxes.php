@@ -2,18 +2,18 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 function mtp_register_meta_boxes() {
-    add_meta_box( 'mtp_lesson_parent_meta_box', 'دوره', 'mtp_lesson_parent_meta_box_html', 'mtp_lesson', 'side' );
-    add_meta_box( 'mtp_topic_course_meta_box', 'دوره', 'mtp_topic_course_meta_box_html', 'mtp_topic', 'side' );
-    add_meta_box( 'mtp_topic_parent_meta_box', 'درس', 'mtp_topic_parent_meta_box_html', 'mtp_topic', 'side' );
+    add_meta_box( 'mtp_lesson_parent_meta_box', 'دوره', 'mtp_lesson_parent_meta_box_html', 'lesson', 'side' );
+    add_meta_box( 'mtp_topic_course_meta_box', 'دوره', 'mtp_topic_course_meta_box_html', 'topic', 'side' );
+    add_meta_box( 'mtp_topic_parent_meta_box', 'درس', 'mtp_topic_parent_meta_box_html', 'topic', 'side' );
     add_meta_box( 'mtp_test_course_meta_box', 'دوره', 'mtp_topic_course_meta_box_html', 'mtp_test', 'side' );
     add_meta_box( 'mtp_test_lesson_meta_box', 'درس', 'mtp_topic_parent_meta_box_html', 'mtp_test', 'side' );
     add_meta_box( 'mtp_test_parent_meta_box', 'مبحث', 'mtp_test_parent_meta_box_html', 'mtp_test', 'side' );
     add_meta_box( 'mtp_test_details_meta_box', 'جزئیات تست', 'mtp_test_details_meta_box_html', 'mtp_test', 'normal' );
-    add_meta_box( 'mtp_topic_tests_meta_box', 'افزودن تست', 'mtp_topic_tests_meta_box_html', 'mtp_topic', 'normal' );
-    add_meta_box( 'mtp_course_lessons_order_meta_box', 'ترتیب درس‌ها', 'mtp_course_lessons_order_meta_box_html', 'mtp_course', 'normal' );
-    add_meta_box( 'mtp_lesson_topics_order_meta_box', 'ترتیب مباحث', 'mtp_lesson_topics_order_meta_box_html', 'mtp_lesson', 'normal' );
+    add_meta_box( 'mtp_topic_tests_meta_box', 'افزودن تست', 'mtp_topic_tests_meta_box_html', 'topic', 'normal' );
+    add_meta_box( 'mtp_course_lessons_order_meta_box', 'ترتیب درس‌ها', 'mtp_course_lessons_order_meta_box_html', 'course', 'normal' );
+    add_meta_box( 'mtp_lesson_topics_order_meta_box', 'ترتیب مباحث', 'mtp_lesson_topics_order_meta_box_html', 'lesson', 'normal' );
 
-    $slug_post_types = [ 'mtp_course', 'mtp_lesson', 'mtp_topic' ];
+    $slug_post_types = [ 'course', 'lesson', 'topic' ];
     foreach ( $slug_post_types as $post_type ) {
         add_meta_box( 'mtp_english_slug_meta_box', 'English Slug', 'mtp_english_slug_meta_box_html', $post_type, 'side' );
     }
@@ -21,17 +21,17 @@ function mtp_register_meta_boxes() {
 add_action( 'add_meta_boxes', 'mtp_register_meta_boxes' );
 
 function mtp_english_slug_meta_box_html( $post ) {
-    $slug = get_post_meta( $post->ID, '_mtp_english_slug', true );
+    $slug = get_post_meta( $post->ID, '_mcp_english_slug', true );
     wp_nonce_field( 'mtp_save_meta_box_data', 'mtp_meta_box_nonce' );
     echo '<input type="text" name="mtp_english_slug" value="'.esc_attr($slug).'" class="widefat">';
 }
 
 function mtp_lesson_parent_meta_box_html( $post ) {
-    $parent_id = get_post_meta( $post->ID, '_mtp_course_id', true );
-    $courses = get_posts( [ 'post_type' => 'mtp_course', 'numberposts' => -1 ] );
+    $parent_id = get_post_meta( $post->ID, '_mcp_course_id', true );
+    $courses = get_posts( [ 'post_type' => 'course', 'numberposts' => -1 ] );
     wp_nonce_field( 'mtp_save_meta_box_data', 'mtp_meta_box_nonce' );
     ?>
-    <select name="mtp_course_id" class="widefat">
+    <select name="mcp_course_id" class="widefat">
         <option value="">— انتخاب —</option>
         <?php foreach ( $courses as $course ) : ?>
             <option value="<?php echo $course->ID; ?>" <?php selected( $parent_id, $course->ID ); ?>><?php echo esc_html( $course->post_title ); ?></option>
@@ -41,11 +41,11 @@ function mtp_lesson_parent_meta_box_html( $post ) {
 }
 
 function mtp_topic_course_meta_box_html( $post ) {
-    $course_id = get_post_meta( $post->ID, '_mtp_course_id', true );
-    $courses = get_posts( [ 'post_type' => 'mtp_course', 'numberposts' => -1 ] );
+    $course_id = get_post_meta( $post->ID, '_mcp_course_id', true );
+    $courses = get_posts( [ 'post_type' => 'course', 'numberposts' => -1 ] );
     wp_nonce_field( 'mtp_save_meta_box_data', 'mtp_meta_box_nonce' );
     ?>
-    <select id="mtp_course_id" name="mtp_course_id" class="widefat">
+    <select id="mcp_course_id" name="mcp_course_id" class="widefat">
         <option value="">— انتخاب —</option>
         <?php foreach ( $courses as $course ) : ?>
             <option value="<?php echo $course->ID; ?>" <?php selected( $course_id, $course->ID ); ?>><?php echo esc_html( $course->post_title ); ?></option>
@@ -55,11 +55,11 @@ function mtp_topic_course_meta_box_html( $post ) {
 }
 
 function mtp_topic_parent_meta_box_html( $post ) {
-    $parent_id = get_post_meta( $post->ID, '_mtp_lesson_id', true );
-    $lessons = get_posts( [ 'post_type' => 'mtp_lesson', 'numberposts' => -1 ] );
+    $parent_id = get_post_meta( $post->ID, '_mcp_lesson_id', true );
+    $lessons = get_posts( [ 'post_type' => 'lesson', 'numberposts' => -1 ] );
     wp_nonce_field( 'mtp_save_meta_box_data', 'mtp_meta_box_nonce' );
     ?>
-    <select id="mtp_lesson_id" name="mtp_lesson_id" class="widefat">
+    <select id="mcp_lesson_id" name="mcp_lesson_id" class="widefat">
         <option value="">— انتخاب —</option>
         <?php foreach ( $lessons as $lesson ) : ?>
             <option value="<?php echo $lesson->ID; ?>" <?php selected( $parent_id, $lesson->ID ); ?>><?php echo esc_html( $lesson->post_title ); ?></option>
@@ -69,11 +69,11 @@ function mtp_topic_parent_meta_box_html( $post ) {
 }
 
 function mtp_test_parent_meta_box_html( $post ) {
-    $parent_id = get_post_meta( $post->ID, '_mtp_topic_id', true );
-    $topics = get_posts( [ 'post_type' => 'mtp_topic', 'numberposts' => -1 ] );
+    $parent_id = get_post_meta( $post->ID, '_mcp_topic_id', true );
+    $topics = get_posts( [ 'post_type' => 'topic', 'numberposts' => -1 ] );
     wp_nonce_field( 'mtp_save_meta_box_data', 'mtp_meta_box_nonce' );
     ?>
-    <select id="mtp_topic_id" name="mtp_topic_id" class="widefat">
+    <select id="mcp_topic_id" name="mcp_topic_id" class="widefat">
         <option value="">— انتخاب —</option>
         <?php foreach ( $topics as $topic ) : ?>
             <option value="<?php echo $topic->ID; ?>" <?php selected( $parent_id, $topic->ID ); ?>><?php echo esc_html( $topic->post_title ); ?></option>
@@ -118,7 +118,7 @@ function mtp_test_details_meta_box_html( $post ) {
 }
 
 function mtp_topic_tests_meta_box_html( $post ) {
-    $tests = get_posts(['post_type' => 'mtp_test', 'meta_key' => '_mtp_topic_id', 'meta_value' => $post->ID, 'numberposts' => -1, 'orderby' => 'date', 'order' => 'ASC']);
+    $tests = get_posts(['post_type' => 'mtp_test', 'meta_key' => '_mcp_topic_id', 'meta_value' => $post->ID, 'numberposts' => -1, 'orderby' => 'date', 'order' => 'ASC']);
     wp_nonce_field( 'mtp_save_meta_box_data', 'mtp_meta_box_nonce' );
     ?>
     <div id="mtp-tests-repeater">
@@ -179,7 +179,7 @@ function mtp_topic_tests_meta_box_html( $post ) {
 }
 
 function mtp_course_lessons_order_meta_box_html( $post ) {
-    $lessons = get_posts(['post_type' => 'mtp_lesson', 'meta_key' => '_mtp_course_id', 'meta_value' => $post->ID, 'numberposts' => -1, 'orderby' => 'menu_order', 'order' => 'ASC']);
+    $lessons = get_posts(['post_type' => 'lesson', 'meta_key' => '_mcp_course_id', 'meta_value' => $post->ID, 'numberposts' => -1, 'orderby' => 'menu_order', 'order' => 'ASC']);
     echo '<ul id="mtp-sortable-lessons" class="mtp-sortable-list">';
     foreach ( $lessons as $lesson ) echo '<li class="ui-state-default" data-id="' . $lesson->ID . '"><span class="dashicons dashicons-move"></span> ' . esc_html( $lesson->post_title ) . '</li>';
     echo '</ul>';
@@ -187,7 +187,7 @@ function mtp_course_lessons_order_meta_box_html( $post ) {
 }
 
 function mtp_lesson_topics_order_meta_box_html( $post ) {
-    $topics = get_posts(['post_type' => 'mtp_topic', 'meta_key' => '_mtp_lesson_id', 'meta_value' => $post->ID, 'numberposts' => -1, 'orderby' => 'menu_order', 'order' => 'ASC']);
+    $topics = get_posts(['post_type' => 'topic', 'meta_key' => '_mcp_lesson_id', 'meta_value' => $post->ID, 'numberposts' => -1, 'orderby' => 'menu_order', 'order' => 'ASC']);
     echo '<ul id="mtp-sortable-topics" class="mtp-sortable-list">';
     foreach ( $topics as $topic ) echo '<li class="ui-state-default" data-id="' . $topic->ID . '"><span class="dashicons dashicons-move"></span> ' . esc_html( $topic->post_title ) . '</li>';
     echo '</ul>';
@@ -201,7 +201,7 @@ function mtp_save_meta_box_data( $post_id ) {
 
     if ( isset( $_POST['mtp_english_slug'] ) ) {
         $slug = sanitize_title( $_POST['mtp_english_slug'] );
-        update_post_meta( $post_id, '_mtp_english_slug', $slug );
+        update_post_meta( $post_id, '_mcp_english_slug', $slug );
 
         // Sync with the native WordPress slug
         if ( ! wp_is_post_revision( $post_id ) ) {
@@ -211,9 +211,9 @@ function mtp_save_meta_box_data( $post_id ) {
         }
     }
 
-    if ( isset( $_POST['mtp_course_id'] ) ) update_post_meta( $post_id, '_mtp_course_id', absint( $_POST['mtp_course_id'] ) );
-    if ( isset( $_POST['mtp_lesson_id'] ) ) update_post_meta( $post_id, '_mtp_lesson_id', absint( $_POST['mtp_lesson_id'] ) );
-    if ( isset( $_POST['mtp_topic_id'] ) ) update_post_meta( $post_id, '_mtp_topic_id', absint( $_POST['mtp_topic_id'] ) );
+    if ( isset( $_POST['mcp_course_id'] ) ) update_post_meta( $post_id, '_mcp_course_id', absint( $_POST['mcp_course_id'] ) );
+    if ( isset( $_POST['mcp_lesson_id'] ) ) update_post_meta( $post_id, '_mcp_lesson_id', absint( $_POST['mcp_lesson_id'] ) );
+    if ( isset( $_POST['mcp_topic_id'] ) ) update_post_meta( $post_id, '_mcp_topic_id', absint( $_POST['mcp_topic_id'] ) );
 
     if ( get_post_type($post_id) == 'mtp_test' ) {
         if ( isset( $_POST['mtp_identifier'] ) ) update_post_meta( $post_id, '_mtp_identifier', sanitize_text_field( $_POST['mtp_identifier'] ) );
@@ -237,7 +237,7 @@ function mtp_save_meta_box_data( $post_id ) {
 
     if ( isset( $_POST['mtp_tests'] ) ) {
         remove_action( 'save_post', 'mtp_save_meta_box_data' );
-        $existing_ids = get_posts(['post_type' => 'mtp_test', 'meta_key' => '_mtp_topic_id', 'meta_value' => $post_id, 'fields' => 'ids', 'numberposts' => -1]);
+        $existing_ids = get_posts(['post_type' => 'mtp_test', 'meta_key' => '_mcp_topic_id', 'meta_value' => $post_id, 'fields' => 'ids', 'numberposts' => -1]);
         $submitted_ids = [];
         foreach ( $_POST['mtp_tests'] as $test_data ) {
             $test_id = ! empty( $test_data['id'] ) ? absint( $test_data['id'] ) : 0;
@@ -245,7 +245,7 @@ function mtp_save_meta_box_data( $post_id ) {
             if ( empty( $question ) ) { if ( $test_id ) wp_delete_post( $test_id, true ); continue; }
             $post_arr = [ 'post_title' => wp_trim_words( $question, 10, '...' ), 'post_type' => 'mtp_test', 'post_status' => 'publish' ];
             if ( $test_id ) { $post_arr['ID'] = $test_id; wp_update_post( $post_arr ); } else { $test_id = wp_insert_post( $post_arr ); }
-            update_post_meta( $test_id, '_mtp_topic_id', $post_id );
+            update_post_meta( $test_id, '_mcp_topic_id', $post_id );
             update_post_meta( $test_id, '_mtp_identifier', sanitize_text_field( $test_data['identifier'] ) );
             update_post_meta( $test_id, '_mtp_question_number', sanitize_text_field( $test_data['question_number'] ) );
             update_post_meta( $test_id, '_mtp_exam', sanitize_text_field( $test_data['exam'] ) );

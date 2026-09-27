@@ -23,7 +23,7 @@ if ( isset( $_GET['view'] ) && $_GET['view'] === 'quiz' ) {
         $title_parts[] = $date_filter;
     }
     if ( ! empty( $course_filter ) ) {
-        $meta_query[] = [ 'key' => '_mtp_course_id', 'value' => $course_filter ];
+        $meta_query[] = [ 'key' => '_mcp_course_id', 'value' => $course_filter ];
         $title_parts[] = get_the_title( $course_filter );
     }
 
@@ -433,7 +433,7 @@ if ( isset( $_GET['view'] ) && $_GET['view'] === 'quiz' ) {
 
     // Fetch all courses
     $all_courses = get_posts([
-        'post_type'    => 'mtp_course',
+        'post_type'    => 'course',
         'numberposts' => -1,
         'orderby'      => 'title',
         'order'        => 'ASC'
@@ -483,7 +483,7 @@ if ( isset( $_GET['view'] ) && $_GET['view'] === 'quiz' ) {
                             WHERE p.post_type = 'mtp_test' AND p.post_status = 'publish'
                               AND m1.meta_key = '_mtp_exam' AND m1.meta_value = %s
                               AND m2.meta_key = '_mtp_date' AND m2.meta_value = %s
-                              AND m3.meta_key = '_mtp_course_id' AND m3.meta_value != ''
+                              AND m3.meta_key = '_mcp_course_id' AND m3.meta_value != ''
                         ", $exam_date->exam, $exam_date->date ) );
                     ?>
                         <div class="mtp-year-card" style="background: var(--bg-card, #fff); border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.3s ease; display: flex; flex-direction: column;">
@@ -524,7 +524,7 @@ if ( isset( $_GET['view'] ) && $_GET['view'] === 'quiz' ) {
                                                     WHERE p.post_type = 'mtp_test' AND p.post_status = 'publish'
                                                       AND m1.meta_key = '_mtp_exam' AND m1.meta_value = %s
                                                       AND m2.meta_key = '_mtp_date' AND m2.meta_value = %s
-                                                      AND m3.meta_key = '_mtp_course_id' AND m3.meta_value = %d
+                                                      AND m3.meta_key = '_mcp_course_id' AND m3.meta_value = %d
                                                 ", $exam_date->exam, $exam_date->date, $cie->course_id ) );
                                             ?>
                                                 <a href="<?php echo esc_url( add_query_arg([ 'view' => 'quiz', 'exam' => $exam_date->exam, 'date' => $exam_date->date, 'course_id' => $cie->course_id ], home_url('/test/')) ); ?>" style="display: flex; justify-content: space-between; align-items: center; color: #1e293b !important; text-decoration: none; padding: 8px 10px; background: white; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.85rem; font-weight: bold; transition: all 0.2s ease;" class="mtp-sub-course-link">
@@ -558,7 +558,7 @@ if ( isset( $_GET['view'] ) && $_GET['view'] === 'quiz' ) {
                             FROM {$wpdb->posts} p
                             JOIN {$wpdb->postmeta} m ON p.ID = m.post_id
                             WHERE p.post_type = 'mtp_test' AND p.post_status = 'publish'
-                              AND m.meta_key = '_mtp_course_id' AND m.meta_value = %d
+                              AND m.meta_key = '_mcp_course_id' AND m.meta_value = %d
                         ", $course->ID ) );
                     ?>
                         <div class="mtp-course-card" style="background: var(--bg-card, #fff); border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; text-align: center;">

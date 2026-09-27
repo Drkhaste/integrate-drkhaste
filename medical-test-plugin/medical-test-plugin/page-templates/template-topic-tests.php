@@ -6,20 +6,20 @@
 get_header();
 
 $topic_id = get_the_ID();
-if (!$topic_id || get_post_type($topic_id) !== 'mtp_topic') {
+if (!$topic_id || get_post_type($topic_id) !== 'topic') {
     $topic_slug = get_query_var('mtp_topic_slug');
-    $topics = get_posts(['post_type' => 'mtp_topic', 'name' => $topic_slug, 'posts_per_page' => 1]);
+    $topics = get_posts(['post_type' => 'topic', 'name' => $topic_slug, 'posts_per_page' => 1]);
     if ($topics) $topic_id = $topics[0]->ID;
 }
 
 if (!$topic_id) wp_die('مبحث یافت نشد.');
 
-$lesson_id = get_post_meta( $topic_id, '_mtp_lesson_id', true );
-$course_id = $lesson_id ? get_post_meta( $lesson_id, '_mtp_course_id', true ) : null;
+$lesson_id = get_post_meta( $topic_id, '_mcp_lesson_id', true );
+$course_id = $lesson_id ? get_post_meta( $lesson_id, '_mcp_course_id', true ) : null;
 
 $tests = get_posts([
     'post_type' => 'mtp_test',
-    'meta_key' => '_mtp_topic_id',
+    'meta_key' => '_mcp_topic_id',
     'meta_value' => $topic_id,
     'numberposts' => -1,
     'orderby' => 'date',
