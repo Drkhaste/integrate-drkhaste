@@ -1,0 +1,34 @@
+/*
+ * Dr. Khasteh – Text Styler Base Styles
+ * Combined editor and frontend base styles.
+ */
+
+/* ── Highlights ───────────────────────────────────────────────────────────── */
+[class^="plugin-highlight-"],
+[class*=" plugin-highlight-"] {
+    padding: 0 4px;
+    border-radius: 3px;
+    display: inline;
+}
+
+/* ── Boxes ────────────────────────────────────────────────────────────────── */
+[class^="plugin-box-"],
+[class*=" plugin-box-"] {
+    display: block;
+    box-sizing: border-box;
+    margin: 16px 0;
+}
+
+/* ── Fantasy Numbers ──────────────────────────────────────────────────────── */
+span.plugin-num-badge {
+    transition: all 0.3s ease;
+}
+span.plugin-num-badge:hover {
+    transform: scale(1.1);
+}
+
+/* ── Editor specific ──────────────────────────────────────────────────────── */
+.mce-btn.wp-text-styler-btn .mce-txt {
+    font-weight: 600;
+    font-size: 12px;
+}

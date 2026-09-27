@@ -1,0 +1,57 @@
+/*
+Theme Name: دکتر خسته (Dr. Khasteh)
+Theme URI: https://example.com/dr-khasteh
+Author: Jules
+Author URI: https://example.com
+Description: قالبی هماهنگ با پلاگین کورس‌ساز برای وب‌سایت‌های آموزشی پزشکی.
+Version: 1.0.0
+Text Domain: dr-khasteh
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+/* Basic Reset and Root Variables */
+:root {
+    --primary: #0f766e;
+    --primary-hover: #0d6e64;
+    --current-font: 'IBM Plex Sans Arabic', sans-serif;
+    --current-font-size: 16px;
+    --bg-body: #f1f5f9;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --border-color: #e2e8f0;
+}
+
+body.dark-mode {
+    --primary: #2dd4bf;
+    --primary-hover: #14b8a6;
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --text-main: #f1f5f9;
+    --border-color: #334155;
+}
+
+body {
+    font-family: var(--current-font);
+    font-size: var(--current-font-size);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    margin: 0;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
