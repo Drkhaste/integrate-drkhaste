@@ -11,7 +11,8 @@ jQuery(document).ready(function($) {
         if (courseId) {
             $.post(mcp_ajax.ajax_url, {
                 action: 'mcp_get_lessons_by_course',
-                course_id: courseId
+                course_id: courseId,
+                nonce: mcp_ajax.nonce
             }, function(response) {
                 if (response.success) {
                     lessonDropdown.prop('disabled', false);
@@ -36,7 +37,8 @@ jQuery(document).ready(function($) {
         if (lessonId) {
             $.post(mcp_ajax.ajax_url, {
                 action: 'mcp_get_topics_by_lesson',
-                lesson_id: lessonId
+                lesson_id: lessonId,
+                nonce: mcp_ajax.nonce
             }, function(response) {
                 if (response.success) {
                     topicDropdown.prop('disabled', false);

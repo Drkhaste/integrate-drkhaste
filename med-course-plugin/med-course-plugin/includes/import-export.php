@@ -450,6 +450,12 @@ add_action( 'init', 'mcp_handle_import_request' );
  * AJAX handler for getting lessons by course.
  */
 function mcp_get_lessons_by_course() {
+    check_ajax_referer( 'mcp_import_export_action', 'nonce', false ) || check_ajax_referer( 'mcp_import_export_nonce', 'nonce', false );
+
+    if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( 'Permission denied' );
+    }
+
     if ( ! isset( $_POST['course_id'] ) || ! is_numeric( $_POST['course_id'] ) ) {
         wp_send_json_error( 'Invalid course ID' );
     }
@@ -480,6 +486,12 @@ add_action( 'wp_ajax_mcp_get_lessons_by_course', 'mcp_get_lessons_by_course' );
  * AJAX handler for getting topics by lesson.
  */
 function mcp_get_topics_by_lesson() {
+    check_ajax_referer( 'mcp_import_export_action', 'nonce', false ) || check_ajax_referer( 'mcp_import_export_nonce', 'nonce', false );
+
+    if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( 'Permission denied' );
+    }
+
     if ( ! isset( $_POST['lesson_id'] ) || ! is_numeric( $_POST['lesson_id'] ) ) {
         wp_send_json_error( 'Invalid lesson ID' );
     }
