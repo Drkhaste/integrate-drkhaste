@@ -62,7 +62,7 @@ class Mind_Map_Studio {
 			),
 			'public'       => true,
 			'show_ui'      => true,
-			'show_in_menu' => 'mms_builder_page',
+			'show_in_menu' => 'course_builder_page',
 			'rewrite'      => false,
 			'query_var'    => true,
 			'supports'     => array( 'title', 'editor', 'thumbnail' ),
@@ -79,7 +79,7 @@ class Mind_Map_Studio {
 			),
 			'public'       => true,
 			'show_ui'      => true,
-			'show_in_menu' => 'mms_builder_page',
+			'show_in_menu' => 'course_builder_page',
 			'rewrite'      => false,
 			'query_var'    => true,
 			'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
@@ -95,7 +95,7 @@ class Mind_Map_Studio {
 			),
 			'public'       => true,
 			'show_ui'      => true,
-			'show_in_menu' => 'mms_builder_page',
+			'show_in_menu' => 'course_builder_page',
 			'rewrite'      => false,
 			'query_var'    => true,
 			'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
@@ -108,7 +108,7 @@ class Mind_Map_Studio {
 			),
 			'public'       => true,
 			'show_ui'      => true,
-			'show_in_menu' => 'mms_builder_page',
+			'show_in_menu' => 'course_builder_page',
 			'rewrite'      => array( 'slug' => 'old-mindmap' ),
 			'supports'     => array( 'title' ),
 		) );
@@ -120,14 +120,14 @@ class Mind_Map_Studio {
 			__( 'نقشه‌ساز ذهنی', 'mind-map-studio' ),
 			__( 'نقشه‌ساز ذهنی', 'mind-map-studio' ),
 			'manage_options',
-			'mms_builder_page',
+			'course_builder_page',
 			null,
 			'dashicons-chart-pie',
 			20
 		);
 
 		add_submenu_page(
-			'mms_builder_page',
+			'course_builder_page',
 			__( 'تنظیمات نقشه ذهنی', 'mind-map-studio' ),
 			__( 'تنظیمات', 'mind-map-studio' ),
 			'manage_options',

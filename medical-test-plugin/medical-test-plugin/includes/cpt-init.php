@@ -17,7 +17,7 @@ function mtp_register_post_types() {
             'labels' => [ 'name' => $labels['name'], 'singular_name' => $labels['singular'] ],
             'public' => true,
             'show_ui' => true,
-            'show_in_menu' => 'mtp_main_menu',
+            'show_in_menu' => 'course_builder_page',
             'menu_icon' => $labels['icon'],
             'supports' => ($type === 'mtp_test') ? [ 'title' ] : [ 'title', 'editor', 'thumbnail', 'page-attributes' ],
             'rewrite' => false,
@@ -31,6 +31,6 @@ add_action( 'init', 'mtp_register_post_types', 5 );
 
 function mtp_admin_menu_setup() {
     if (!empty($GLOBALS['admin_page_hooks']['mtp_main_menu'])) return;
-    add_menu_page( 'مدیریت تست‌ها', 'مدیریت تست‌ها', 'manage_options', 'mtp_main_menu', null, 'dashicons-welcome-learn-more', 2 );
+    // Menu unified under course_builder_page
 }
 add_action( 'admin_menu', 'mtp_admin_menu_setup' );
