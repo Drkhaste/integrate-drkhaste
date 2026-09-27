@@ -102,7 +102,7 @@ Dr_Khasteh_Settings::init();
 function dr_khasteh_custom_admin_css() {
     $css = get_option( 'dr_khasteh_admin_css', '' );
     if ( ! empty( $css ) ) {
-        echo '<style id="dr-khasteh-custom-admin-css">' . $css . '</style>';
+        echo '<style id="dr-khasteh-custom-admin-css">' . wp_strip_all_tags( $css ) . '</style>';
     }
 }
 add_action( 'admin_head', 'dr_khasteh_custom_admin_css' );
@@ -110,7 +110,7 @@ add_action( 'admin_head', 'dr_khasteh_custom_admin_css' );
 function dr_khasteh_custom_login_css() {
     $css = get_option( 'dr_khasteh_login_css', '' );
     if ( ! empty( $css ) ) {
-        echo '<style id="dr-khasteh-custom-login-css">' . $css . '</style>';
+        echo '<style id="dr-khasteh-custom-login-css">' . wp_strip_all_tags( $css ) . '</style>';
     }
 }
 add_action( 'login_head', 'dr_khasteh_custom_login_css' );

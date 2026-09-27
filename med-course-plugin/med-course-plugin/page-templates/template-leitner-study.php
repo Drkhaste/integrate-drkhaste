@@ -29,16 +29,16 @@ $categorized = $service->get_topic_cards_categorized($user_id, $topic_id);
     <div class="breadcrumb-container">
         <?php if ( $course_id ) : ?>
             <div class="breadcrumb-item">
-                <a href="<?php echo mcp_get_permalink($course_id); ?>"><?php echo get_the_title($course_id); ?></a>
+                <a href="<?php echo esc_url( mcp_get_permalink($course_id) ); ?>"><?php echo esc_html( get_the_title($course_id) ); ?></a>
             </div>
         <?php endif; ?>
         <?php if ( $lesson_id ) : ?>
             <div class="breadcrumb-item">
-                <a href="<?php echo mcp_get_permalink($lesson_id); ?>"><?php echo get_the_title($lesson_id); ?></a>
+                <a href="<?php echo esc_url( mcp_get_permalink($lesson_id) ); ?>"><?php echo esc_html( get_the_title($lesson_id) ); ?></a>
             </div>
         <?php endif; ?>
         <div class="breadcrumb-item">
-            <a href="<?php echo mcp_get_permalink($topic_id); ?>"><?php echo get_the_title($topic_id); ?></a>
+            <a href="<?php echo esc_url( mcp_get_permalink($topic_id) ); ?>"><?php echo esc_html( get_the_title($topic_id) ); ?></a>
         </div>
         <div class="breadcrumb-item active">
             <span>مطالعه لایتنر</span>
@@ -47,7 +47,7 @@ $categorized = $service->get_topic_cards_categorized($user_id, $topic_id);
 
     <div class="leitner-study-container" id="mcp-leitner-app">
         <div class="leitner-header">
-            <h2>مطالعه فلش‌کارت‌ها: <?php echo get_the_title($topic_id); ?></h2>
+            <h2>مطالعه فلش‌کارت‌ها: <?php echo esc_html( get_the_title($topic_id) ); ?></h2>
         </div>
 
         <?php if ( ! empty( $categorized['ready'] ) || ! empty( $categorized['h24'] ) || ! empty( $categorized['d3'] ) ) : ?>
@@ -79,7 +79,7 @@ $categorized = $service->get_topic_cards_categorized($user_id, $topic_id);
         <?php else : ?>
             <div class="no-cards-message">
                 <p>هنوز فلش‌کارتی برای این مبحث اضافه نشده است.</p>
-                <a href="<?php echo mcp_get_permalink($topic_id); ?>" class="btn study-mode-btn">بازگشت به مبحث</a>
+                <a href="<?php echo esc_url( mcp_get_permalink($topic_id) ); ?>" class="btn study-mode-btn">بازگشت به مبحث</a>
             </div>
         <?php endif; ?>
     </div>
@@ -88,7 +88,7 @@ $categorized = $service->get_topic_cards_categorized($user_id, $topic_id);
 <?php
 function mcp_render_study_flashcard_item($flashcard, $topic_id) {
     ?>
-    <div class="fc-item" data-id="<?php echo $flashcard->ID; ?>" data-topic="<?php echo $topic_id; ?>" onclick="mcpFlipCard(this)">
+    <div class="fc-item" data-id="<?php echo esc_attr($flashcard->ID); ?>" data-topic="<?php echo esc_attr($topic_id); ?>" onclick="mcpFlipCard(this)">
         <div class="fc-card-inner">
             <div class="fc-card-front">
                 <div class="fc-question"><?php echo apply_filters( 'the_content', get_post_meta( $flashcard->ID, '_mcp_question', true ) ); ?></div>

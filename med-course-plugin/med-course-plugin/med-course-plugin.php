@@ -139,7 +139,10 @@ function mcp_admin_enqueue_scripts( $hook ) {
             '1.0.0',
             true
         );
-        wp_localize_script( 'mcp-import-export-scripts', 'mcp_ajax', [ 'ajax_url' => admin_url( 'admin-ajax.php' ) ] );
+        wp_localize_script( 'mcp-import-export-scripts', 'mcp_ajax', [
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce'    => wp_create_nonce( 'mcp_import_export_action' )
+        ] );
     }
 
     // Enqueue scripts for the post list page (filtering)
@@ -443,6 +446,10 @@ function mcp_get_permalink( $post_id ) {
 function mcp_create_section_type_ajax_handler() {
     check_ajax_referer( 'mcp_create_section_type_nonce', 'nonce' );
 
+    if ( ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( [ 'message' => 'Permission denied.' ] );
+    }
+
     $title = isset( $_POST['title'] ) ? sanitize_text_field( $_POST['title'] ) : '';
     $icon_class = isset( $_POST['icon_class'] ) ? sanitize_text_field( $_POST['icon_class'] ) : '';
     $is_starred = isset( $_POST['is_starred'] ) && $_POST['is_starred'] === 'true' ? '1' : '0';
@@ -477,6 +484,10 @@ add_action( 'wp_ajax_mcp_create_section_type', 'mcp_create_section_type_ajax_han
  * AJAX handler for getting lessons by course.
  */
 function mcp_get_lessons_by_course_ajax_handler() {
+    if ( ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( [ 'message' => 'Permission denied.' ] );
+    }
+
     $course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
 
     if ( ! $course_id ) {

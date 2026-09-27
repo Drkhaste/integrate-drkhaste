@@ -858,6 +858,10 @@ class Mind_Map_Studio {
 	}
 
 	public static function ajax_get_lessons() {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'message' => 'Permission denied.' ) );
+		}
+
 		$course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
 		$lessons   = get_posts( array( 'post_type' => self::CPT_LESSON, 'meta_key' => '_mms_course_id', 'meta_value' => $course_id, 'numberposts' => -1 ) );
 		$data      = array();

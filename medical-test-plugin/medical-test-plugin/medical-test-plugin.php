@@ -52,7 +52,10 @@ function mtp_admin_assets($hook) {
     if ( strpos( $hook, 'mtp-csv-import' ) !== false || strpos( $hook, 'mtp-csv-export' ) !== false ) {
         wp_enqueue_style( 'mtp-import-export-styles', MTP_PLUGIN_URL . 'assets/css/import-export.css', [], '1.0.0' );
         wp_enqueue_script( 'mtp-import-export-scripts', MTP_PLUGIN_URL . 'assets/js/import-export.js', [ 'jquery' ], '1.0.0', true );
-        wp_localize_script( 'mtp-import-export-scripts', 'mtp_ajax', [ 'ajax_url' => admin_url( 'admin-ajax.php' ) ] );
+        wp_localize_script( 'mtp-import-export-scripts', 'mtp_ajax', [
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce'    => wp_create_nonce( 'mtp_import_export_action' )
+        ] );
     }
 }
 add_action('admin_enqueue_scripts', 'mtp_admin_assets');
@@ -191,6 +194,12 @@ add_action( 'template_redirect', 'mtp_landing_template_redirect', 5 );
  * AJAX handlers for dependent dropdowns.
  */
 function mtp_get_lessons_by_course_ajax_handler() {
+    check_ajax_referer( 'mtp_import_export_action', 'nonce', false ) || check_ajax_referer( 'mtp_import_export_nonce', 'nonce', false );
+
+    if ( ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( [ 'message' => 'Permission denied.' ] );
+    }
+
     $course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
     $lessons = get_posts( [ 'post_type'  => 'mtp_lesson', 'meta_key'   => '_mtp_course_id', 'meta_value' => $course_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
     $data = [];
@@ -200,6 +209,12 @@ function mtp_get_lessons_by_course_ajax_handler() {
 add_action( 'wp_ajax_mtp_get_lessons_by_course', 'mtp_get_lessons_by_course_ajax_handler' );
 
 function mtp_get_topics_by_lesson_ajax_handler() {
+    check_ajax_referer( 'mtp_import_export_action', 'nonce', false ) || check_ajax_referer( 'mtp_import_export_nonce', 'nonce', false );
+
+    if ( ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( [ 'message' => 'Permission denied.' ] );
+    }
+
     $lesson_id = isset( $_POST['lesson_id'] ) ? absint( $_POST['lesson_id'] ) : 0;
     $topics = get_posts( [ 'post_type'  => 'mtp_topic', 'meta_key'   => '_mtp_lesson_id', 'meta_value' => $lesson_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
     $data = [];
