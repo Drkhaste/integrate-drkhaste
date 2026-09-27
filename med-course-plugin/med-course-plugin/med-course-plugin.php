@@ -282,21 +282,21 @@ function mcp_custom_rewrite_rules() {
         'index.php?mcp_leitner_study=1&topic_slug=$matches[3]&course_slug=$matches[1]&lesson_slug=$matches[2]',
         'top'
     );
-    // Rule for Course/Study - Topic
+    // Rule for Study - Topic
     add_rewrite_rule(
-        '^(?:course|study)/([^/]+)/([^/]+)/([^/]+)/?$',
+        '^study/([^/]+)/([^/]+)/([^/]+)/?$',
         'index.php?post_type=topic&name=$matches[3]&topic_slug=$matches[3]&lesson_slug=$matches[2]&course_slug=$matches[1]',
         'top'
     );
-    // Rule for Course/Study - Lesson
+    // Rule for Study - Lesson
     add_rewrite_rule(
-        '^(?:course|study)/([^/]+)/([^/]+)/?$',
+        '^study/([^/]+)/([^/]+)/?$',
         'index.php?post_type=lesson&name=$matches[2]&lesson_slug=$matches[2]&course_slug=$matches[1]',
         'top'
     );
-    // Rule for Course/Study - Course
+    // Rule for Study - Course
     add_rewrite_rule(
-        '^(?:course|study)/([^/]+)/?$',
+        '^study/([^/]+)/?$',
         'index.php?post_type=course&name=$matches[1]&course_slug=$matches[1]',
         'top'
     );
@@ -431,7 +431,7 @@ function mcp_get_permalink( $post_id ) {
     }
 
     if ( ! empty( $slugs ) ) {
-        return home_url( '/course/' . implode( '/', $slugs ) . '/' );
+        return home_url( '/study/' . implode( '/', $slugs ) . '/' );
     }
 
     return get_permalink( $post_id );
