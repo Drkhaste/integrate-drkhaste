@@ -25,7 +25,7 @@ require_once MTP_PLUGIN_DIR . 'includes/hooks.php';
  * Enqueue assets.
  */
 function mtp_enqueue_assets() {
-    $is_mtp = get_query_var('mtp_route') || is_singular(['course', 'lesson', 'topic']);
+    $is_mtp = get_query_var('mtp_route') || get_query_var('mtp_landing');
 
     if ($is_mtp) {
         wp_enqueue_style('mtp-custom-css', MTP_PLUGIN_URL . 'assets/css/custom.css', [], '2.3.0');
@@ -138,10 +138,6 @@ function mtp_templates($template) {
         $c_slug = get_query_var('mtp_course_slug');
         if (!empty($c_slug)) return MTP_PLUGIN_DIR . 'templates/single-course.php';
     }
-
-    if (is_singular('topic')) return MTP_PLUGIN_DIR . 'page-templates/template-topic-tests.php';
-    if (is_singular('lesson')) return MTP_PLUGIN_DIR . 'templates/single-lesson.php';
-    if (is_singular('course')) return MTP_PLUGIN_DIR . 'templates/single-course.php';
 
     return $template;
 }
