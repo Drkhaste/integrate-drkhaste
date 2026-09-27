@@ -7,7 +7,8 @@ class Dr_Khaste_MindMaps {
 
 	public static function init() {
 		add_shortcode( 'mindmap', array( __CLASS__, 'render_shortcode' ) );
-		add_action( 'wp_ajax_get_mindmap_list', array( __CLASS__, 'ajax_get_mindmap_list' ) );
+		add_action( 'wp_ajax_dr_khaste_get_mindmap_list', array( __CLASS__, 'ajax_get_mindmap_list' ) );
+		add_action( 'admin_init', array( __CLASS__, 'tinymce_setup' ) );
 	}
 
 	public static function get_frontend_settings() {
@@ -63,8 +64,32 @@ class Dr_Khaste_MindMaps {
 		return ob_get_clean();
 	}
 
+	public static function tinymce_setup() {
+		if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) ) {
+			return;
+		}
+		if ( 'true' === get_user_option( 'rich_editing' ) ) {
+			add_filter( 'mce_external_plugins', array( __CLASS__, 'add_tinymce_plugin' ) );
+			add_filter( 'mce_buttons', array( __CLASS__, 'register_tinymce_button' ) );
+		}
+	}
+
+	public static function add_tinymce_plugin( $plugin_array ) {
+		$plugin_array['mind_map'] = DR_KHASTE_CORE_URL . 'assets/js/mindmap-tinymce.js';
+		return $plugin_array;
+	}
+
+	public static function register_tinymce_button( $buttons ) {
+		$buttons[] = 'mind_map';
+		return $buttons;
+	}
+
 	public static function ajax_get_mindmap_list() {
-		check_ajax_referer( 'mind_map_tinymce', 'security' );
+		check_ajax_referer( 'dr_khaste_admin_nonce', 'nonce' );
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
+		}
+
 		$query = new WP_Query( array(
 			'post_type'      => 'mms_mind_map',
 			'posts_per_page' => -1,
