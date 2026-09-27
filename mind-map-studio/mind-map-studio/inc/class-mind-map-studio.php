@@ -32,7 +32,7 @@ class Mind_Map_Studio {
 		add_filter( 'manage_' . self::CPT_SLUG . '_posts_columns',   array( __CLASS__, 'add_shortcode_column' ) );
 		add_action( 'manage_' . self::CPT_SLUG . '_posts_custom_column', array( __CLASS__, 'render_shortcode_column' ), 10, 2 );
 		add_filter( 'template_include',                              array( __CLASS__, 'load_custom_templates' ) );
-		add_filter( 'post_type_link',                                array( __CLASS__, 'filter_mms_links' ), 10, 2 );
+		// add_filter( 'post_type_link',                                array( __CLASS__, 'filter_mms_links' ), 10, 2 );
 
 		if ( ! get_option( 'mms_rules_flushed_v6' ) ) {
 			add_action( 'init', function() {
@@ -818,15 +818,17 @@ class Mind_Map_Studio {
 
 	/* ── TEMPLATES ── */
 	public static function load_custom_templates( $template ) {
-		if ( is_singular( self::CPT_COURSE ) ) {
-			$t = MIND_MAP_STUDIO_PATH . 'templates/single-mms_course.php';
-			if ( file_exists( $t ) ) return $t;
-		} elseif ( is_singular( self::CPT_LESSON ) ) {
-			$t = MIND_MAP_STUDIO_PATH . 'templates/single-mms_lesson.php';
-			if ( file_exists( $t ) ) return $t;
-		} elseif ( is_singular( self::CPT_TOPIC ) ) {
-			$t = MIND_MAP_STUDIO_PATH . 'templates/single-mms_topic.php';
-			if ( file_exists( $t ) ) return $t;
+		if ( get_query_var( 'mms_route' ) ) {
+			if ( is_singular( self::CPT_COURSE ) ) {
+				$t = MIND_MAP_STUDIO_PATH . 'templates/single-mms_course.php';
+				if ( file_exists( $t ) ) return $t;
+			} elseif ( is_singular( self::CPT_LESSON ) ) {
+				$t = MIND_MAP_STUDIO_PATH . 'templates/single-mms_lesson.php';
+				if ( file_exists( $t ) ) return $t;
+			} elseif ( is_singular( self::CPT_TOPIC ) ) {
+				$t = MIND_MAP_STUDIO_PATH . 'templates/single-mms_topic.php';
+				if ( file_exists( $t ) ) return $t;
+			}
 		}
 		return $template;
 	}
@@ -878,12 +880,13 @@ class Mind_Map_Studio {
 	}
 
 	public static function custom_rewrite_rules() {
-		add_rewrite_rule( '^mindmap/([^/]+)/([^/]+)/([^/]+)/?$', 'index.php?post_type=topic&name=$matches[3]', 'top' );
-		add_rewrite_rule( '^mindmap/([^/]+)/([^/]+)/?$', 'index.php?post_type=lesson&name=$matches[2]', 'top' );
-		add_rewrite_rule( '^mindmap/([^/]+)/?$', 'index.php?post_type=course&name=$matches[1]', 'top' );
+		add_rewrite_rule( '^mindmap/([^/]+)/([^/]+)/([^/]+)/?$', 'index.php?mms_route=1&post_type=topic&name=$matches[3]&mms_topic_slug=$matches[3]&mms_lesson_slug=$matches[2]&mms_course_slug=$matches[1]', 'top' );
+		add_rewrite_rule( '^mindmap/([^/]+)/([^/]+)/?$', 'index.php?mms_route=1&post_type=lesson&name=$matches[2]&mms_lesson_slug=$matches[2]&mms_course_slug=$matches[1]', 'top' );
+		add_rewrite_rule( '^mindmap/([^/]+)/?$', 'index.php?mms_route=1&post_type=course&name=$matches[1]&mms_course_slug=$matches[1]', 'top' );
 	}
 
 	public static function register_query_vars( $vars ) {
+		$vars[] = 'mms_route';
 		$vars[] = 'mms_course_slug';
 		$vars[] = 'mms_lesson_slug';
 		$vars[] = 'mms_topic_slug';
