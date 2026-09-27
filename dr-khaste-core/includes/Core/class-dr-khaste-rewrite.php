@@ -106,6 +106,39 @@ class Dr_Khaste_Rewrite {
 				exit;
 			}
 		}
+
+		// Template Include Routing
+		if ( get_query_var( 'mcp_leitner_study' ) ) {
+			$template = DR_KHASTE_CORE_PATH . 'templates/leitner-study.php';
+			if ( file_exists( $template ) ) {
+				include $template;
+				exit;
+			}
+		}
+
+		if ( is_singular( 'topic' ) ) {
+			$template = DR_KHASTE_CORE_PATH . 'templates/single-topic.php';
+			if ( file_exists( $template ) ) {
+				include $template;
+				exit;
+			}
+		}
+
+		if ( is_singular( 'course' ) ) {
+			$template = DR_KHASTE_CORE_PATH . 'templates/single-course.php';
+			if ( file_exists( $template ) ) {
+				include $template;
+				exit;
+			}
+		}
+
+		if ( is_singular( 'lesson' ) ) {
+			$template = DR_KHASTE_CORE_PATH . 'templates/single-lesson.php';
+			if ( file_exists( $template ) ) {
+				include $template;
+				exit;
+			}
+		}
 	}
 }
 
