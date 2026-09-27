@@ -25,25 +25,25 @@ require_once MTP_PLUGIN_DIR . 'includes/hooks.php';
  * Enqueue assets.
  */
 function mtp_enqueue_assets() {
-    $is_mtp = get_query_var('mtp_route') || is_singular(['mtp_course', 'mtp_lesson', 'mtp_topic']);
+    $is_mtp = get_query_var('mtp_route') || is_singular(['course', 'lesson', 'topic']);
 
     if ($is_mtp) {
         wp_enqueue_style('mtp-custom-css', MTP_PLUGIN_URL . 'assets/css/custom.css', [], '2.3.0');
-        wp_enqueue_style('mtp-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css', [], '6.5.1');
+        // FontAwesome is enqueued by theme dr-khasteh
     }
 }
 add_action('wp_enqueue_scripts', 'mtp_enqueue_assets');
 
 function mtp_admin_assets($hook) {
     global $post;
-    $mtp_types = ['mtp_course', 'mtp_lesson', 'mtp_topic', 'mtp_test'];
+    $mtp_types = ['course', 'lesson', 'topic', 'mtp_test'];
     if ( ( $hook == 'post-new.php' || $hook == 'post.php' ) && isset($post->post_type) && in_array($post->post_type, $mtp_types) ) {
         wp_enqueue_editor();
         wp_enqueue_style('mtp-admin-css', MTP_PLUGIN_URL . 'assets/css/admin-styles.css', [], '2.1.0');
         wp_enqueue_script('mtp-admin-js', MTP_PLUGIN_URL . 'assets/js/admin-scripts.js', ['jquery', 'wp-editor'], '2.1.0', true);
         wp_localize_script('mtp-admin-js', 'mtp_ajax', ['ajax_url' => admin_url('admin-ajax.php')]);
 
-        if (in_array($post->post_type, ['mtp_course', 'mtp_lesson'])) {
+        if (in_array($post->post_type, ['course', 'lesson'])) {
             wp_enqueue_script('jquery-ui-sortable');
             wp_enqueue_script('mtp-sortable', MTP_PLUGIN_URL . 'assets/js/sortable-items.js', ['jquery', 'jquery-ui-sortable'], '1.0.0', true);
             wp_localize_script('mtp-sortable', 'mtp_sort_ajax', ['ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('mtp_update_order_nonce')]);
@@ -102,9 +102,9 @@ function mtp_resolve_route($query) {
         $slug = '';
         $type = '';
 
-        if (!empty($t_slug)) { $slug = $t_slug; $type = 'mtp_topic'; }
-        elseif (!empty($l_slug)) { $slug = $l_slug; $type = 'mtp_lesson'; }
-        elseif (!empty($c_slug)) { $slug = $c_slug; $type = 'mtp_course'; }
+        if (!empty($t_slug)) { $slug = $t_slug; $type = 'topic'; }
+        elseif (!empty($l_slug)) { $slug = $l_slug; $type = 'lesson'; }
+        elseif (!empty($c_slug)) { $slug = $c_slug; $type = 'course'; }
 
         if ($type) {
             $query->set('post_type', $type);
@@ -139,9 +139,9 @@ function mtp_templates($template) {
         if (!empty($c_slug)) return MTP_PLUGIN_DIR . 'templates/single-course.php';
     }
 
-    if (is_singular('mtp_topic')) return MTP_PLUGIN_DIR . 'page-templates/template-topic-tests.php';
-    if (is_singular('mtp_lesson')) return MTP_PLUGIN_DIR . 'templates/single-lesson.php';
-    if (is_singular('mtp_course')) return MTP_PLUGIN_DIR . 'templates/single-course.php';
+    if (is_singular('topic')) return MTP_PLUGIN_DIR . 'page-templates/template-topic-tests.php';
+    if (is_singular('lesson')) return MTP_PLUGIN_DIR . 'templates/single-lesson.php';
+    if (is_singular('course')) return MTP_PLUGIN_DIR . 'templates/single-course.php';
 
     return $template;
 }
@@ -192,7 +192,7 @@ add_action( 'template_redirect', 'mtp_landing_template_redirect', 5 );
  */
 function mtp_get_lessons_by_course_ajax_handler() {
     $course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
-    $lessons = get_posts( [ 'post_type'  => 'mtp_lesson', 'meta_key'   => '_mtp_course_id', 'meta_value' => $course_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
+    $lessons = get_posts( [ 'post_type'  => 'lesson', 'meta_key'   => '_mcp_course_id', 'meta_value' => $course_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
     $data = [];
     foreach ( $lessons as $lesson ) $data[] = [ 'id' => $lesson->ID, 'title' => $lesson->post_title ];
     wp_send_json_success( $data );
@@ -201,7 +201,7 @@ add_action( 'wp_ajax_mtp_get_lessons_by_course', 'mtp_get_lessons_by_course_ajax
 
 function mtp_get_topics_by_lesson_ajax_handler() {
     $lesson_id = isset( $_POST['lesson_id'] ) ? absint( $_POST['lesson_id'] ) : 0;
-    $topics = get_posts( [ 'post_type'  => 'mtp_topic', 'meta_key'   => '_mtp_lesson_id', 'meta_value' => $lesson_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
+    $topics = get_posts( [ 'post_type'  => 'topic', 'meta_key'   => '_mcp_lesson_id', 'meta_value' => $lesson_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
     $data = [];
     foreach ( $topics as $topic ) $data[] = [ 'id' => $topic->ID, 'title' => $topic->post_title ];
     wp_send_json_success( $data );

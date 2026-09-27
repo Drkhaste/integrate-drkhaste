@@ -11,8 +11,8 @@
     </div>
     <?php
     $lessons = get_posts([
-        'post_type' => 'mtp_lesson',
-        'meta_key' => '_mtp_course_id',
+        'post_type' => 'lesson',
+        'meta_key' => '_mcp_course_id',
         'meta_value' => $course_id,
         'numberposts' => -1,
         'orderby' => [ 'menu_order' => 'ASC', 'date' => 'ASC' ]
@@ -32,8 +32,8 @@
                 <div class="card-content">
                     <?php
                     $topics = get_posts([
-                        'post_type' => 'mtp_topic',
-                        'meta_key' => '_mtp_lesson_id',
+                        'post_type' => 'topic',
+                        'meta_key' => '_mcp_lesson_id',
                         'meta_value' => $lesson->ID,
                         'numberposts' => -1,
                         'orderby' => [ 'menu_order' => 'ASC', 'date' => 'ASC' ]

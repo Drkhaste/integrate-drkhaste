@@ -3,13 +3,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 function mtp_register_post_types() {
     $cpts = [
-        'mtp_course' => [ 'name' => 'تست - کورس‌ها', 'singular' => 'کورس', 'icon' => 'dashicons-welcome-learn-more' ],
-        'mtp_lesson' => [ 'name' => 'تست - درس‌ها', 'singular' => 'درس', 'icon' => 'dashicons-book' ],
-        'mtp_topic'  => [ 'name' => 'تست - مباحث', 'singular' => 'مبحث', 'icon' => 'dashicons-analytics' ],
+        'course' => [ 'name' => 'کورس‌ها', 'singular' => 'کورس', 'icon' => 'dashicons-welcome-learn-more' ],
+        'lesson' => [ 'name' => 'درس‌ها', 'singular' => 'درس', 'icon' => 'dashicons-book' ],
+        'topic'  => [ 'name' => 'مباحث', 'singular' => 'مبحث', 'icon' => 'dashicons-analytics' ],
         'mtp_test'   => [ 'name' => 'تست‌ها', 'singular' => 'تست', 'icon' => 'dashicons-text-page' ],
     ];
 
     foreach ($cpts as $type => $labels) {
+        if ( post_type_exists( $type ) ) {
+            continue;
+        }
         register_post_type($type, [
             'labels' => [ 'name' => $labels['name'], 'singular_name' => $labels['singular'] ],
             'public' => true,
@@ -24,7 +27,7 @@ function mtp_register_post_types() {
         ]);
     }
 }
-add_action( 'init', 'mtp_register_post_types' );
+add_action( 'init', 'mtp_register_post_types', 5 );
 
 function mtp_admin_menu_setup() {
     if (!empty($GLOBALS['admin_page_hooks']['mtp_main_menu'])) return;

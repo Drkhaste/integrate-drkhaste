@@ -1,8 +1,8 @@
 <?php
     get_header();
     $topic_id  = get_the_ID();
-    $lesson_id = get_post_meta( $topic_id, '_mms_lesson_id', true );
-    $course_id = get_post_meta( $topic_id, '_mms_course_id', true );
+    $lesson_id = get_post_meta( $topic_id, '_mcp_lesson_id', true );
+    $course_id = get_post_meta( $topic_id, '_mcp_course_id', true );
 
     wp_enqueue_style( 'jsmind' );
     wp_enqueue_style( 'mms-frontend' );

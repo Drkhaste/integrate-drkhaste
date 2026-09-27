@@ -8,9 +8,9 @@ defined( 'ABSPATH' ) || exit;
 
 class Mind_Map_Studio {
 
-	const CPT_COURSE    = 'mms_course';
-	const CPT_LESSON    = 'mms_lesson';
-	const CPT_TOPIC     = 'mms_topic';
+	const CPT_COURSE    = 'course';
+	const CPT_LESSON    = 'lesson';
+	const CPT_TOPIC     = 'topic';
 	const CPT_SLUG      = 'mind_map';
 	const SETTINGS_SLUG = 'mind-map-settings';
 
@@ -405,7 +405,7 @@ class Mind_Map_Studio {
 	}
 
 	public static function render_english_slug_meta_box( $post ) {
-		$slug = get_post_meta( $post->ID, '_mms_english_slug', true );
+		$slug = get_post_meta( $post->ID, '_mcp_english_slug', true );
 		wp_nonce_field( 'mms_save_english_slug', 'mms_english_slug_nonce' );
 		?>
 		<input type="text" name="mms_english_slug" value="<?php echo esc_attr( $slug ); ?>" class="widefat">
@@ -414,11 +414,11 @@ class Mind_Map_Studio {
 	}
 
 	public static function render_lesson_parent_meta_box( $post ) {
-		$course_id = get_post_meta( $post->ID, '_mms_course_id', true );
+		$course_id = get_post_meta( $post->ID, '_mcp_course_id', true );
 		$courses   = get_posts( array( 'post_type' => self::CPT_COURSE, 'numberposts' => -1 ) );
 		wp_nonce_field( 'mms_save_lesson_parent', 'mms_lesson_parent_nonce' );
 		?>
-		<select name="mms_course_id" class="widefat">
+		<select name="mcp_course_id" class="widefat">
 			<option value=""><?php _e( '— انتخاب کنید —', 'mind-map-studio' ); ?></option>
 			<?php foreach ( $courses as $course ) : ?>
 				<option value="<?php echo $course->ID; ?>" <?php selected( $course_id, $course->ID ); ?>><?php echo esc_html( $course->post_title ); ?></option>
@@ -428,11 +428,11 @@ class Mind_Map_Studio {
 	}
 
 	public static function render_topic_course_meta_box( $post ) {
-		$course_id = get_post_meta( $post->ID, '_mms_course_id', true );
+		$course_id = get_post_meta( $post->ID, '_mcp_course_id', true );
 		$courses   = get_posts( array( 'post_type' => self::CPT_COURSE, 'numberposts' => -1 ) );
 		wp_nonce_field( 'mms_save_topic_course', 'mms_topic_course_nonce' );
 		?>
-		<select name="mms_course_id" id="mms_course_id" class="widefat">
+		<select name="mcp_course_id" id="mcp_course_id" class="widefat">
 			<option value=""><?php _e( '— انتخاب کنید —', 'mind-map-studio' ); ?></option>
 			<?php foreach ( $courses as $course ) : ?>
 				<option value="<?php echo $course->ID; ?>" <?php selected( $course_id, $course->ID ); ?>><?php echo esc_html( $course->post_title ); ?></option>
@@ -442,20 +442,20 @@ class Mind_Map_Studio {
 	}
 
 	public static function render_topic_lesson_meta_box( $post ) {
-		$course_id = get_post_meta( $post->ID, '_mms_course_id', true );
-		$lesson_id = get_post_meta( $post->ID, '_mms_lesson_id', true );
+		$course_id = get_post_meta( $post->ID, '_mcp_course_id', true );
+		$lesson_id = get_post_meta( $post->ID, '_mcp_lesson_id', true );
 		$lessons   = array();
 		if ( $course_id ) {
 			$lessons = get_posts( array(
 				'post_type'   => self::CPT_LESSON,
-				'meta_key'    => '_mms_course_id',
+				'meta_key'    => '_mcp_course_id',
 				'meta_value'  => $course_id,
 				'numberposts' => -1,
 			) );
 		}
 		wp_nonce_field( 'mms_save_topic_lesson', 'mms_topic_lesson_nonce' );
 		?>
-		<select name="mms_lesson_id" id="mms_lesson_id" class="widefat">
+		<select name="mcp_lesson_id" id="mcp_lesson_id" class="widefat">
 			<option value=""><?php _e( '— انتخاب کنید —', 'mind-map-studio' ); ?></option>
 			<?php foreach ( $lessons as $lesson ) : ?>
 				<option value="<?php echo $lesson->ID; ?>" <?php selected( $lesson_id, $lesson->ID ); ?>><?php echo esc_html( $lesson->post_title ); ?></option>
@@ -463,9 +463,9 @@ class Mind_Map_Studio {
 		</select>
 		<script>
 		jQuery(document).ready(function($) {
-			$('#mms_course_id').on('change', function() {
+			$('#mcp_course_id').on('change', function() {
 				var course_id = $(this).val();
-				var $lesson_select = $('#mms_lesson_id');
+				var $lesson_select = $('#mcp_lesson_id');
 				$lesson_select.empty().append('<option value=""><?php _e( 'در حال بارگذاری...', 'mind-map-studio' ); ?></option>');
 				$.post(ajaxurl, { action: 'mms_get_lessons', course_id: course_id }, function(response) {
 					$lesson_select.empty().append('<option value=""><?php _e( '— انتخاب کنید —', 'mind-map-studio' ); ?></option>');
@@ -484,13 +484,13 @@ class Mind_Map_Studio {
 	public static function render_course_lessons_order_meta_box( $post ) {
 		$lessons = get_posts( array(
 			'post_type'   => self::CPT_LESSON,
-			'meta_key'    => '_mms_course_id',
+			'meta_key'    => '_mcp_course_id',
 			'meta_value'  => $post->ID,
 			'orderby'     => 'menu_order',
 			'order'       => 'ASC',
 			'numberposts' => -1,
 		) );
-		echo '<ul class="mms-sortable-items" data-post-type="mms_lesson">';
+		echo '<ul class="mms-sortable-items" data-post-type="lesson">';
 		foreach ( $lessons as $lesson ) {
 			echo '<li data-id="' . $lesson->ID . '" style="padding: 10px; background: #fff; border: 1px solid #ccd0d4; margin-bottom: 5px; cursor: move;"><span class="dashicons dashicons-menu"></span> ' . esc_html( $lesson->post_title ) . '</li>';
 		}
@@ -501,13 +501,13 @@ class Mind_Map_Studio {
 	public static function render_lesson_topics_order_meta_box( $post ) {
 		$topics = get_posts( array(
 			'post_type'   => self::CPT_TOPIC,
-			'meta_key'    => '_mms_lesson_id',
+			'meta_key'    => '_mcp_lesson_id',
 			'meta_value'  => $post->ID,
 			'orderby'     => 'menu_order',
 			'order'       => 'ASC',
 			'numberposts' => -1,
 		) );
-		echo '<ul class="mms-sortable-items" data-post-type="mms_topic">';
+		echo '<ul class="mms-sortable-items" data-post-type="topic">';
 		foreach ( $topics as $topic ) {
 			echo '<li data-id="' . $topic->ID . '" style="padding: 10px; background: #fff; border: 1px solid #ccd0d4; margin-bottom: 5px; cursor: move;"><span class="dashicons dashicons-menu"></span> ' . esc_html( $topic->post_title ) . '</li>';
 		}
@@ -648,7 +648,7 @@ class Mind_Map_Studio {
 		if ( isset( $_POST['mms_english_slug_nonce'] ) && wp_verify_nonce( $_POST['mms_english_slug_nonce'], 'mms_save_english_slug' ) ) {
 			if ( isset( $_POST['mms_english_slug'] ) ) {
 				$slug = sanitize_title( $_POST['mms_english_slug'] );
-				update_post_meta( $post_id, '_mms_english_slug', $slug );
+				update_post_meta( $post_id, '_mcp_english_slug', $slug );
 				remove_action( 'save_post', array( __CLASS__, 'save_meta_box_data' ) );
 				wp_update_post( array( 'ID' => $post_id, 'post_name' => $slug ) );
 				add_action( 'save_post', array( __CLASS__, 'save_meta_box_data' ) );
@@ -656,19 +656,19 @@ class Mind_Map_Studio {
 		}
 
 		if ( isset( $_POST['mms_lesson_parent_nonce'] ) && wp_verify_nonce( $_POST['mms_lesson_parent_nonce'], 'mms_save_lesson_parent' ) ) {
-			if ( isset( $_POST['mms_course_id'] ) ) {
-				update_post_meta( $post_id, '_mms_course_id', absint( $_POST['mms_course_id'] ) );
+			if ( isset( $_POST['mcp_course_id'] ) ) {
+				update_post_meta( $post_id, '_mcp_course_id', absint( $_POST['mcp_course_id'] ) );
 			}
 		}
 
 		if ( isset( $_POST['mms_topic_course_nonce'] ) && wp_verify_nonce( $_POST['mms_topic_course_nonce'], 'mms_save_topic_course' ) ) {
-			if ( isset( $_POST['mms_course_id'] ) ) {
-				update_post_meta( $post_id, '_mms_course_id', absint( $_POST['mms_course_id'] ) );
+			if ( isset( $_POST['mcp_course_id'] ) ) {
+				update_post_meta( $post_id, '_mcp_course_id', absint( $_POST['mcp_course_id'] ) );
 			}
 		}
 		if ( isset( $_POST['mms_topic_lesson_nonce'] ) && wp_verify_nonce( $_POST['mms_topic_lesson_nonce'], 'mms_save_topic_lesson' ) ) {
-			if ( isset( $_POST['mms_lesson_id'] ) ) {
-				update_post_meta( $post_id, '_mms_lesson_id', absint( $_POST['mms_lesson_id'] ) );
+			if ( isset( $_POST['mcp_lesson_id'] ) ) {
+				update_post_meta( $post_id, '_mcp_lesson_id', absint( $_POST['mcp_lesson_id'] ) );
 			}
 		}
 
@@ -859,7 +859,7 @@ class Mind_Map_Studio {
 
 	public static function ajax_get_lessons() {
 		$course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
-		$lessons   = get_posts( array( 'post_type' => self::CPT_LESSON, 'meta_key' => '_mms_course_id', 'meta_value' => $course_id, 'numberposts' => -1 ) );
+		$lessons   = get_posts( array( 'post_type' => self::CPT_LESSON, 'meta_key' => '_mcp_course_id', 'meta_value' => $course_id, 'numberposts' => -1 ) );
 		$data      = array();
 		foreach ( $lessons as $lesson ) {
 			$data[] = array( 'id' => $lesson->ID, 'title' => $lesson->post_title );
@@ -878,9 +878,9 @@ class Mind_Map_Studio {
 	}
 
 	public static function custom_rewrite_rules() {
-		add_rewrite_rule( '^mindmap/([^/]+)/([^/]+)/([^/]+)/?$', 'index.php?post_type=mms_topic&name=$matches[3]', 'top' );
-		add_rewrite_rule( '^mindmap/([^/]+)/([^/]+)/?$', 'index.php?post_type=mms_lesson&name=$matches[2]', 'top' );
-		add_rewrite_rule( '^mindmap/([^/]+)/?$', 'index.php?post_type=mms_course&name=$matches[1]', 'top' );
+		add_rewrite_rule( '^mindmap/([^/]+)/([^/]+)/([^/]+)/?$', 'index.php?post_type=topic&name=$matches[3]', 'top' );
+		add_rewrite_rule( '^mindmap/([^/]+)/([^/]+)/?$', 'index.php?post_type=lesson&name=$matches[2]', 'top' );
+		add_rewrite_rule( '^mindmap/([^/]+)/?$', 'index.php?post_type=course&name=$matches[1]', 'top' );
 	}
 
 	public static function register_query_vars( $vars ) {
@@ -899,11 +899,11 @@ class Mind_Map_Studio {
 		switch ( $post_type ) {
 			case self::CPT_TOPIC:
 				$topic_slug = $post->post_name;
-				$lesson_id  = get_post_meta( $post_id, '_mms_lesson_id', true );
+				$lesson_id  = get_post_meta( $post_id, '_mcp_lesson_id', true );
 				if ( $lesson_id ) {
 					$lesson      = get_post( $lesson_id );
 					$lesson_slug = $lesson ? $lesson->post_name : '';
-					$course_id   = get_post_meta( $post_id, '_mms_course_id', true );
+					$course_id   = get_post_meta( $post_id, '_mcp_course_id', true );
 					if ( $course_id ) {
 						$course      = get_post( $course_id );
 						$course_slug = $course ? $course->post_name : '';
@@ -915,7 +915,7 @@ class Mind_Map_Studio {
 				break;
 			case self::CPT_LESSON:
 				$lesson_slug = $post->post_name;
-				$course_id   = get_post_meta( $post_id, '_mms_course_id', true );
+				$course_id   = get_post_meta( $post_id, '_mcp_course_id', true );
 				if ( $course_id ) {
 					$course      = get_post( $course_id );
 					$course_slug = $course ? $course->post_name : '';
