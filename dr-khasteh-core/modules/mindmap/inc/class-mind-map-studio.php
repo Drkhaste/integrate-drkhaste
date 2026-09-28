@@ -51,55 +51,61 @@ class Mind_Map_Studio {
 
 	/* ── CPT ── */
 	public static function register_post_types() {
-		register_post_type( self::CPT_COURSE, array(
-			'labels' => array(
-				'name'          => __( 'کورس‌های نقشه ذهنی', 'mind-map-studio' ),
-				'singular_name' => __( 'کورس', 'mind-map-studio' ),
-				'menu_name'     => __( 'نقشه‌ساز ذهنی', 'mind-map-studio' ),
-				'all_items'     => __( 'همه کورس‌ها', 'mind-map-studio' ),
-				'add_new'       => __( 'افزودن کورس جدید', 'mind-map-studio' ),
-				'add_new_item'  => __( 'افزودن کورس جدید', 'mind-map-studio' ),
-			),
-			'public'       => true,
-			'show_ui'      => true,
-			'show_in_menu' => 'course_builder_page',
-			'rewrite'      => false,
-			'query_var'    => true,
-			'supports'     => array( 'title', 'editor', 'thumbnail' ),
-			'menu_icon'    => 'dashicons-welcome-learn-more',
-		) );
+		if ( ! post_type_exists( self::CPT_COURSE ) ) {
+			register_post_type( self::CPT_COURSE, array(
+				'labels' => array(
+					'name'          => __( 'کورس‌ها', 'mind-map-studio' ),
+					'singular_name' => __( 'کورس', 'mind-map-studio' ),
+					'menu_name'     => __( 'کورس ساز', 'mind-map-studio' ),
+					'all_items'     => __( 'همه کورس‌ها', 'mind-map-studio' ),
+					'add_new'       => __( 'افزودن کورس جدید', 'mind-map-studio' ),
+					'add_new_item'  => __( 'افزودن کورس جدید', 'mind-map-studio' ),
+				),
+				'public'       => true,
+				'show_ui'      => true,
+				'show_in_menu' => 'course_builder_page',
+				'rewrite'      => false,
+				'query_var'    => true,
+				'supports'     => array( 'title', 'editor', 'thumbnail' ),
+				'menu_icon'    => 'dashicons-welcome-learn-more',
+			) );
+		}
 
-		register_post_type( self::CPT_LESSON, array(
-			'labels' => array(
-				'name'          => __( 'درس‌ها', 'mind-map-studio' ),
-				'singular_name' => __( 'درس', 'mind-map-studio' ),
-				'all_items'     => __( 'همه درس‌ها', 'mind-map-studio' ),
-				'add_new'       => __( 'افزودن درس جدید', 'mind-map-studio' ),
-				'add_new_item'  => __( 'افزودن درس جدید', 'mind-map-studio' ),
-			),
-			'public'       => true,
-			'show_ui'      => true,
-			'show_in_menu' => 'course_builder_page',
-			'rewrite'      => false,
-			'query_var'    => true,
-			'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-		) );
+		if ( ! post_type_exists( self::CPT_LESSON ) ) {
+			register_post_type( self::CPT_LESSON, array(
+				'labels' => array(
+					'name'          => __( 'درس‌ها', 'mind-map-studio' ),
+					'singular_name' => __( 'درس', 'mind-map-studio' ),
+					'all_items'     => __( 'همه درس‌ها', 'mind-map-studio' ),
+					'add_new'       => __( 'افزودن درس جدید', 'mind-map-studio' ),
+					'add_new_item'  => __( 'افزودن درس جدید', 'mind-map-studio' ),
+				),
+				'public'       => true,
+				'show_ui'      => true,
+				'show_in_menu' => 'course_builder_page',
+				'rewrite'      => false,
+				'query_var'    => true,
+				'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
+			) );
+		}
 
-		register_post_type( self::CPT_TOPIC, array(
-			'labels' => array(
-				'name'          => __( 'مباحث', 'mind-map-studio' ),
-				'singular_name' => __( 'مبحث', 'mind-map-studio' ),
-				'all_items'     => __( 'همه مباحث', 'mind-map-studio' ),
-				'add_new'       => __( 'افزودن مبحث جدید', 'mind-map-studio' ),
-				'add_new_item'  => __( 'افزودن مبحث جدید', 'mind-map-studio' ),
-			),
-			'public'       => true,
-			'show_ui'      => true,
-			'show_in_menu' => 'course_builder_page',
-			'rewrite'      => false,
-			'query_var'    => true,
-			'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-		) );
+		if ( ! post_type_exists( self::CPT_TOPIC ) ) {
+			register_post_type( self::CPT_TOPIC, array(
+				'labels' => array(
+					'name'          => __( 'مباحث', 'mind-map-studio' ),
+					'singular_name' => __( 'مبحث', 'mind-map-studio' ),
+					'all_items'     => __( 'همه مباحث', 'mind-map-studio' ),
+					'add_new'       => __( 'افزودن مبحث جدید', 'mind-map-studio' ),
+					'add_new_item'  => __( 'افزودن مبحث جدید', 'mind-map-studio' ),
+				),
+				'public'       => true,
+				'show_ui'      => true,
+				'show_in_menu' => 'course_builder_page',
+				'rewrite'      => false,
+				'query_var'    => true,
+				'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
+			) );
+		}
 
 		register_post_type( self::CPT_SLUG, array(
 			'labels' => array(
