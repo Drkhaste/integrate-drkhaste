@@ -64,6 +64,11 @@ class Dr_Khasteh_Core {
             require_once DR_KHASTEH_CORE_PATH . 'includes/cpt-init.php';
         }
 
+        // Load Central Shared Meta Boxes
+        if ( file_exists( DR_KHASTEH_CORE_PATH . 'includes/Admin/meta-boxes.php' ) ) {
+            require_once DR_KHASTEH_CORE_PATH . 'includes/Admin/meta-boxes.php';
+        }
+
         // Load Central Shared AJAX Handlers
         if ( file_exists( DR_KHASTEH_CORE_PATH . 'includes/ajax-init.php' ) ) {
             require_once DR_KHASTEH_CORE_PATH . 'includes/ajax-init.php';
