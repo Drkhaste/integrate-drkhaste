@@ -477,6 +477,10 @@ add_action( 'wp_ajax_mcp_create_section_type', 'mcp_create_section_type_ajax_han
  * AJAX handler for getting lessons by course.
  */
 function mcp_get_lessons_by_course_ajax_handler() {
+    if ( ! current_user_can( 'edit_posts' ) ) {
+        wp_send_json_error( [ 'message' => 'Permission denied.' ] );
+    }
+
     $course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
 
     if ( ! $course_id ) {

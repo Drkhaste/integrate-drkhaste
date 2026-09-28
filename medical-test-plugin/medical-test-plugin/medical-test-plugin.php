@@ -187,6 +187,7 @@ add_action( 'template_redirect', 'mtp_landing_template_redirect', 5 );
  * AJAX handlers for dependent dropdowns.
  */
 function mtp_get_lessons_by_course_ajax_handler() {
+    if ( ! current_user_can( 'edit_posts' ) ) wp_send_json_error( [ 'message' => 'Permission denied.' ] );
     $course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
     $lessons = get_posts( [ 'post_type'  => 'lesson', 'meta_key'   => '_mcp_course_id', 'meta_value' => $course_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
     $data = [];
@@ -196,6 +197,7 @@ function mtp_get_lessons_by_course_ajax_handler() {
 add_action( 'wp_ajax_mtp_get_lessons_by_course', 'mtp_get_lessons_by_course_ajax_handler' );
 
 function mtp_get_topics_by_lesson_ajax_handler() {
+    if ( ! current_user_can( 'edit_posts' ) ) wp_send_json_error( [ 'message' => 'Permission denied.' ] );
     $lesson_id = isset( $_POST['lesson_id'] ) ? absint( $_POST['lesson_id'] ) : 0;
     $topics = get_posts( [ 'post_type'  => 'topic', 'meta_key'   => '_mcp_lesson_id', 'meta_value' => $lesson_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
     $data = [];

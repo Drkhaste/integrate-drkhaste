@@ -57,12 +57,9 @@ function dr_khasteh_scripts() {
         wp_enqueue_style( 'dr-khasteh-local-fonts', $local_base . '/local-fonts.css', [], '1.0.0' );
         wp_enqueue_style( 'dr-khasteh-fontawesome-local', $local_base . '/fontawesome-local.css', [], '6.5.1' );
     } else {
-        // Fonts via CDN
-        wp_enqueue_style( 'vazirmatn', 'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap', [], null );
-        wp_enqueue_style( 'ibm-plex-sans-arabic', 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap', [], null );
+        // Combined Google Fonts call to minimize HTTP requests and improve performance
+        wp_enqueue_style( 'dr-khasteh-google-fonts', 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@100..900&family=Vazirmatn:wght@100..900&family=Zain:wght@200;300;400;700;800;900&display=swap', [], null );
         wp_enqueue_style( 'playpen-sans-arabic', 'https://cdn.jsdelivr.net/npm/@fontsource/playpen-sans-arabic/index.css', [], null );
-        wp_enqueue_style( 'zain', 'https://fonts.googleapis.com/css2?family=Zain:wght@200;300;400;700;800;900&display=swap', [], null );
-        wp_enqueue_style( 'noto-sans-arabic', 'https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap', [], null );
 
         // Font Awesome - Using a more reliable CDN
         wp_enqueue_style( 'dr-khasteh-fontawesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css', [], '6.5.1' );
