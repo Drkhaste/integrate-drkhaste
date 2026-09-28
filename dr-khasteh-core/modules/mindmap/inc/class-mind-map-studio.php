@@ -112,9 +112,9 @@ class Mind_Map_Studio {
 				'name'          => __( 'نقشه‌های قدیمی', 'mind-map-studio' ),
 				'singular_name' => __( 'نقشه ذهنی', 'mind-map-studio' ),
 			),
-			'public'       => true,
-			'show_ui'      => true,
-			'show_in_menu' => 'course_builder_page',
+			'public'       => false,
+			'show_ui'      => false,
+			'show_in_menu' => false,
 			'rewrite'      => array( 'slug' => 'old-mindmap' ),
 			'supports'     => array( 'title' ),
 		) );
@@ -122,20 +122,10 @@ class Mind_Map_Studio {
 
 	/* ── ADMIN MENU ── */
 	public static function add_admin_menu() {
-		add_menu_page(
-			__( 'نقشه‌ساز ذهنی', 'mind-map-studio' ),
-			__( 'نقشه‌ساز ذهنی', 'mind-map-studio' ),
-			'manage_options',
-			'course_builder_page',
-			null,
-			'dashicons-chart-pie',
-			20
-		);
-
 		add_submenu_page(
 			'course_builder_page',
 			__( 'تنظیمات نقشه ذهنی', 'mind-map-studio' ),
-			__( 'تنظیمات', 'mind-map-studio' ),
+			__( 'تنظیمات نقشه ذهنی', 'mind-map-studio' ),
 			'manage_options',
 			self::SETTINGS_SLUG,
 			array( __CLASS__, 'render_settings_page' )
