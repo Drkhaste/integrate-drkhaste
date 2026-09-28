@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
                     url: mcp_sort_ajax.ajax_url,
                     type: 'POST',
                     data: {
-                        action: 'mcp_update_items_order',
+                        action: 'dr_khasteh_update_items_order',
                         order: order,
                         nonce: nonce
                     },

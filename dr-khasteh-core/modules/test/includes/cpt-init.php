@@ -6,7 +6,7 @@ function mtp_register_post_types() {
         'course' => [ 'name' => 'کورس‌ها', 'singular' => 'کورس', 'icon' => 'dashicons-welcome-learn-more' ],
         'lesson' => [ 'name' => 'درس‌ها', 'singular' => 'درس', 'icon' => 'dashicons-book' ],
         'topic'  => [ 'name' => 'مباحث', 'singular' => 'مبحث', 'icon' => 'dashicons-analytics' ],
-        'mtp_test'   => [ 'name' => 'تست‌ها', 'singular' => 'تست', 'icon' => 'dashicons-text-page' ],
+        'test'   => [ 'name' => 'تست‌ها', 'singular' => 'تست', 'icon' => 'dashicons-text-page' ],
     ];
 
     foreach ($cpts as $type => $labels) {
@@ -19,7 +19,7 @@ function mtp_register_post_types() {
             'show_ui' => true,
             'show_in_menu' => 'course_builder_page',
             'menu_icon' => $labels['icon'],
-            'supports' => ($type === 'mtp_test') ? [ 'title' ] : [ 'title', 'editor', 'thumbnail', 'page-attributes' ],
+            'supports' => ($type === 'test') ? [ 'title' ] : [ 'title', 'editor', 'thumbnail', 'page-attributes' ],
             'rewrite' => false,
             'query_var' => true,
             'publicly_queryable' => true,

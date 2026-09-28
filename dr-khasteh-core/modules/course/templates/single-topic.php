@@ -1,8 +1,8 @@
 <?php
     get_header();
     $topic_id = get_the_ID();
-    $lesson_id = get_post_meta( $topic_id, '_mcp_lesson_id', true );
-    $course_id = $lesson_id ? get_post_meta( $lesson_id, '_mcp_course_id', true ) : null;
+    $lesson_id = get_post_meta( $topic_id, '_lesson_id', true );
+    $course_id = $lesson_id ? get_post_meta( $lesson_id, '_course_id', true ) : null;
 
     // Leitner Logic Integration
     $repository = new MCP_Leitner_Repository();
@@ -29,7 +29,7 @@
     </div>
 
     <?php
-    $sections = get_post_meta( $topic_id, '_mcp_sections', true );
+    $sections = get_post_meta( $topic_id, '_sections', true );
     if ( ! empty( $sections ) ) {
         foreach ( $sections as $section ) {
             $section_type_id = $section['section_type'];
@@ -69,9 +69,9 @@
         <?php if ( ! empty( $categorized['ready'] ) || ! empty( $categorized['h24'] ) || ! empty( $categorized['d3'] ) ) : ?>
             <div style="text-align: center; margin-bottom: 20px;">
                 <?php
-                $course_slug = get_post_meta( $course_id, '_mcp_english_slug', true );
-                $lesson_slug = get_post_meta( $lesson_id, '_mcp_english_slug', true );
-                $topic_slug = get_post_meta( $topic_id, '_mcp_english_slug', true );
+                $course_slug = get_post_meta( $course_id, '_english_slug', true );
+                $lesson_slug = get_post_meta( $lesson_id, '_english_slug', true );
+                $topic_slug = get_post_meta( $topic_id, '_english_slug', true );
 
                 if ( ! empty( $course_slug ) && ! empty( $lesson_slug ) && ! empty( $topic_slug ) ) :
                     $study_url = home_url( "/leitner/{$course_slug}/{$lesson_slug}/{$topic_slug}/" );
@@ -118,11 +118,11 @@ function mcp_render_flashcard_item($flashcard, $topic_id) {
     <div class="fc-item" data-id="<?php echo $flashcard->ID; ?>" data-topic="<?php echo $topic_id; ?>" onclick="mcpFlipCard(this)">
         <div class="fc-card-inner">
             <div class="fc-card-front">
-                <div class="fc-question"><?php echo apply_filters( 'the_content', get_post_meta( $flashcard->ID, '_mcp_question', true ) ); ?></div>
+                <div class="fc-question"><?php echo apply_filters( 'the_content', get_post_meta( $flashcard->ID, '_question', true ) ); ?></div>
                 <div style="margin-top: 15px; color: var(--primary); font-size: 0.8em; opacity: 0.7;">برای مشاهده پاسخ کلیک کنید</div>
             </div>
             <div class="fc-card-back">
-                <div class="fc-ans-content"><?php echo apply_filters( 'the_content', get_post_meta( $flashcard->ID, '_mcp_answer', true ) ); ?></div>
+                <div class="fc-ans-content"><?php echo apply_filters( 'the_content', get_post_meta( $flashcard->ID, '_answer', true ) ); ?></div>
                 <div class="leitner-actions">
                     <button class="btn-fail" onclick="mcpSubmitLeitner(event, this, 1)">۱. بلد نبودم</button>
                     <button class="btn-doubt" onclick="mcpSubmitLeitner(event, this, 2)">۲. با شک بلد بودم</button>

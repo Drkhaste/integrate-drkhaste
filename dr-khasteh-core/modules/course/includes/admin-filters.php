@@ -32,7 +32,7 @@ function mcp_add_admin_list_filters() {
             if ( $current_course ) {
                 $lessons = get_posts( [
                     'post_type'  => 'lesson',
-                    'meta_key'   => '_mcp_course_id',
+                    'meta_key'   => '_course_id',
                     'meta_value' => $current_course,
                     'numberposts' => -1,
                     'orderby'    => 'title',
@@ -65,14 +65,14 @@ function mcp_filter_admin_list_query( $query ) {
 
         if ( ! empty( $_GET['mcp_filter_course'] ) ) {
             $meta_query[] = [
-                'key'   => '_mcp_course_id',
+                'key'   => '_course_id',
                 'value' => absint( $_GET['mcp_filter_course'] ),
             ];
         }
 
         if ( $post_type === 'topic' && ! empty( $_GET['mcp_filter_lesson'] ) ) {
             $meta_query[] = [
-                'key'   => '_mcp_lesson_id',
+                'key'   => '_lesson_id',
                 'value' => absint( $_GET['mcp_filter_lesson'] ),
             ];
         }

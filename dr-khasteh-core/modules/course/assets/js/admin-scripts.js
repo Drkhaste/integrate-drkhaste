@@ -46,7 +46,7 @@ jQuery(document).ready(function($) {
                     url: mcp_ajax.ajax_url,
                     type: 'POST',
                     data: {
-                        action: 'mcp_get_lessons_by_course',
+                        action: 'dr_khasteh_get_lessons_by_course',
                         course_id: courseId
                     },
                     success: function(response) {
@@ -71,7 +71,7 @@ jQuery(document).ready(function($) {
                         url: mcp_ajax.ajax_url,
                         type: 'POST',
                         data: {
-                            action: 'mcp_get_topics_by_lesson',
+                            action: 'dr_khasteh_get_topics_by_lesson',
                             lesson_id: lessonId
                         },
                         success: function(response) {

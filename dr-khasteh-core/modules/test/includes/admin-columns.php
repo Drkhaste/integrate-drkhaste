@@ -18,11 +18,11 @@ add_filter( 'manage_topic_posts_columns', 'mtp_add_custom_columns' );
 
 function mtp_custom_column_content( $column, $post_id ) {
     if ( 'course' === $column ) {
-        $course_id = get_post_meta( $post_id, '_mcp_course_id', true );
+        $course_id = get_post_meta( $post_id, '_course_id', true );
         echo $course_id ? esc_html( get_the_title( $course_id ) ) : '—';
     }
     if ( 'lesson' === $column ) {
-        $lesson_id = get_post_meta( $post_id, '_mcp_lesson_id', true );
+        $lesson_id = get_post_meta( $post_id, '_lesson_id', true );
         echo $lesson_id ? esc_html( get_the_title( $lesson_id ) ) : '—';
     }
 }

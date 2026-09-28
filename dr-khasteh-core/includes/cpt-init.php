@@ -146,9 +146,9 @@ function dr_khasteh_core_register_post_types() {
         ] );
     }
 
-    // 6. Medical Test CPT (mtp_test)
-    if ( ! post_type_exists( 'mtp_test' ) ) {
-        register_post_type( 'mtp_test', [
+    // 6. Medical Test CPT (test)
+    if ( ! post_type_exists( 'test' ) ) {
+        register_post_type( 'test', [
             'label'               => __( 'تست‌های پزشکی', 'dr-khasteh-core' ),
             'labels'              => [
                 'name'          => __( 'تست‌های پزشکی', 'dr-khasteh-core' ),

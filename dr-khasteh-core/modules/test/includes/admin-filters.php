@@ -14,7 +14,7 @@ function mtp_add_admin_list_filters() {
             $current_lesson = isset( $_GET['mtp_filter_lesson'] ) ? absint( $_GET['mtp_filter_lesson'] ) : 0;
             echo '<select name="mtp_filter_lesson" id="mtp_filter_lesson"><option value="">همه درس‌ها</option>';
             if ( $current_course ) {
-                $lessons = get_posts( [ 'post_type' => 'lesson', 'meta_key' => '_mcp_course_id', 'meta_value' => $current_course, 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ] );
+                $lessons = get_posts( [ 'post_type' => 'lesson', 'meta_key' => '_course_id', 'meta_value' => $current_course, 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ] );
                 foreach ( $lessons as $lesson ) echo '<option value="' . $lesson->ID . '" ' . selected( $current_lesson, $lesson->ID, false ) . '>' . esc_html( $lesson->post_title ) . '</option>';
             }
             echo '</select>';
@@ -29,8 +29,8 @@ function mtp_filter_admin_list_query( $query ) {
     $post_type = $query->get( 'post_type' );
     if ( in_array( $post_type, [ 'lesson', 'topic' ] ) ) {
         $meta_query = (array) $query->get( 'meta_query' );
-        if ( ! empty( $_GET['mtp_filter_course'] ) ) $meta_query[] = [ 'key' => '_mcp_course_id', 'value' => absint( $_GET['mtp_filter_course'] ) ];
-        if ( $post_type === 'topic' && ! empty( $_GET['mtp_filter_lesson'] ) ) $meta_query[] = [ 'key' => '_mcp_lesson_id', 'value' => absint( $_GET['mtp_filter_lesson'] ) ];
+        if ( ! empty( $_GET['mtp_filter_course'] ) ) $meta_query[] = [ 'key' => '_course_id', 'value' => absint( $_GET['mtp_filter_course'] ) ];
+        if ( $post_type === 'topic' && ! empty( $_GET['mtp_filter_lesson'] ) ) $meta_query[] = [ 'key' => '_lesson_id', 'value' => absint( $_GET['mtp_filter_lesson'] ) ];
         if ( ! empty( $meta_query ) ) $query->set( 'meta_query', $meta_query );
     }
 }

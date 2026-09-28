@@ -18,13 +18,13 @@ function mcp_get_all_descendant_ids( $parent_id ) {
 
     if ( $post_type === 'course' ) {
         $child_post_type = 'lesson';
-        $meta_key = '_mcp_course_id';
+        $meta_key = '_course_id';
     } elseif ( $post_type === 'lesson' ) {
         $child_post_type = 'topic';
-        $meta_key = '_mcp_lesson_id';
+        $meta_key = '_lesson_id';
     } elseif ( $post_type === 'topic' ) {
         // Topics have flashcards as children
-        return mcp_get_all_descendant_ids_by_meta( $parent_id, 'flashcard', '_mcp_topic_id' );
+        return mcp_get_all_descendant_ids_by_meta( $parent_id, 'flashcard', '_topic_id' );
     } else {
         return [];
     }

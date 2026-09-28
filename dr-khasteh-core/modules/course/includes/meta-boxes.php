@@ -121,7 +121,7 @@ add_action( 'add_meta_boxes', 'mcp_register_meta_boxes' );
  * Meta box display callback for English slug.
  */
 function mcp_english_slug_meta_box_html( $post ) {
-    $slug = get_post_meta( $post->ID, '_mcp_english_slug', true );
+    $slug = get_post_meta( $post->ID, '_english_slug', true );
     wp_nonce_field( 'mcp_save_english_slug_meta_box_data', 'mcp_english_slug_meta_box_nonce' );
     ?>
     <label for="mcp_english_slug"><?php _e( 'Enter a URL-friendly slug:', 'med-course-plugin' ); ?></label>
@@ -134,7 +134,7 @@ function mcp_english_slug_meta_box_html( $post ) {
  * Meta box display callback for lesson parent.
  */
 function mcp_lesson_parent_meta_box_html( $post ) {
-    $parent_id = get_post_meta( $post->ID, '_mcp_course_id', true );
+    $parent_id = get_post_meta( $post->ID, '_course_id', true );
     $courses = get_posts( [ 'post_type' => 'course', 'numberposts' => -1 ] );
     wp_nonce_field( 'mcp_save_lesson_parent_meta_box_data', 'mcp_lesson_parent_meta_box_nonce' );
     ?>
@@ -154,7 +154,7 @@ function mcp_lesson_parent_meta_box_html( $post ) {
  * Meta box display callback for topic course.
  */
 function mcp_topic_course_meta_box_html( $post ) {
-    $course_id = get_post_meta( $post->ID, '_mcp_course_id', true );
+    $course_id = get_post_meta( $post->ID, '_course_id', true );
     $courses = get_posts( [ 'post_type' => 'course', 'numberposts' => -1 ] );
     wp_nonce_field( 'mcp_save_topic_course_meta_box_data', 'mcp_topic_course_meta_box_nonce' );
     ?>
@@ -174,7 +174,7 @@ function mcp_topic_course_meta_box_html( $post ) {
  * Meta box display callback for topic parent.
  */
 function mcp_topic_parent_meta_box_html( $post ) {
-    $parent_id = get_post_meta( $post->ID, '_mcp_lesson_id', true );
+    $parent_id = get_post_meta( $post->ID, '_lesson_id', true );
     $lessons = get_posts( [ 'post_type' => 'lesson', 'numberposts' => -1 ] );
     wp_nonce_field( 'mcp_save_topic_parent_meta_box_data', 'mcp_topic_parent_meta_box_nonce' );
     ?>
@@ -194,7 +194,7 @@ function mcp_topic_parent_meta_box_html( $post ) {
  * Meta box display callback for flashcard parent.
  */
 function mcp_flashcard_parent_meta_box_html( $post ) {
-    $parent_id = get_post_meta( $post->ID, '_mcp_topic_id', true );
+    $parent_id = get_post_meta( $post->ID, '_topic_id', true );
     $topics = get_posts( [ 'post_type' => 'topic', 'numberposts' => -1 ] );
     wp_nonce_field( 'mcp_save_flashcard_parent_meta_box_data', 'mcp_flashcard_parent_meta_box_nonce' );
     ?>
@@ -214,8 +214,8 @@ function mcp_flashcard_parent_meta_box_html( $post ) {
  * Meta box display callback for flashcard details.
  */
 function mcp_flashcard_details_meta_box_html( $post ) {
-    $question = get_post_meta( $post->ID, '_mcp_question', true );
-    $answer = get_post_meta( $post->ID, '_mcp_answer', true );
+    $question = get_post_meta( $post->ID, '_question', true );
+    $answer = get_post_meta( $post->ID, '_answer', true );
     wp_nonce_field( 'mcp_save_flashcard_details_meta_box_data', 'mcp_flashcard_details_meta_box_nonce' );
     ?>
     <label for="mcp_question"><?php _e( 'Question:', 'med-course-plugin' ); ?></label>
@@ -229,7 +229,7 @@ function mcp_flashcard_details_meta_box_html( $post ) {
  * Meta box display callback for topic sections.
  */
 function mcp_topic_sections_meta_box_html( $post ) {
-    $sections = get_post_meta( $post->ID, '_mcp_sections', true );
+    $sections = get_post_meta( $post->ID, '_sections', true );
 
     $all_section_types = get_posts( [
         'post_type' => 'section_type',
@@ -375,7 +375,7 @@ function mcp_section_type_icon_meta_box_html( $post ) {
 function mcp_topic_flashcards_meta_box_html( $post ) {
     $flashcards = get_posts([
         'post_type' => 'flashcard',
-        'meta_key' => '_mcp_topic_id',
+        'meta_key' => '_topic_id',
         'meta_value' => $post->ID,
         'numberposts' => -1,
         'orderby' => 'date',
@@ -400,9 +400,9 @@ function mcp_topic_flashcards_meta_box_html( $post ) {
                 <?php foreach ( $flashcards as $index => $flashcard ) : ?>
                     <div class="mcp-flashcard">
                         <label><?php _e( 'Question:', 'med-course-plugin' ); ?></label>
-                        <textarea name="mcp_flashcards[<?php echo $index; ?>][question]" class="widefat" rows="3"><?php echo esc_textarea( get_post_meta( $flashcard->ID, '_mcp_question', true ) ); ?></textarea>
+                        <textarea name="mcp_flashcards[<?php echo $index; ?>][question]" class="widefat" rows="3"><?php echo esc_textarea( get_post_meta( $flashcard->ID, '_question', true ) ); ?></textarea>
                         <label><?php _e( 'Answer:', 'med-course-plugin' ); ?></label>
-                        <textarea name="mcp_flashcards[<?php echo $index; ?>][answer]" class="widefat" rows="3"><?php echo esc_textarea( get_post_meta( $flashcard->ID, '_mcp_answer', true ) ); ?></textarea>
+                        <textarea name="mcp_flashcards[<?php echo $index; ?>][answer]" class="widefat" rows="3"><?php echo esc_textarea( get_post_meta( $flashcard->ID, '_answer', true ) ); ?></textarea>
                         <input type="hidden" name="mcp_flashcards[<?php echo $index; ?>][id]" value="<?php echo esc_attr( $flashcard->ID ); ?>">
                         <button type="button" class="button mcp-remove-flashcard"><?php _e( 'Remove Flashcard', 'med-course-plugin' ); ?></button>
                     </div>
@@ -421,7 +421,7 @@ function mcp_topic_flashcards_meta_box_html( $post ) {
 function mcp_course_lessons_order_meta_box_html( $post ) {
     $lessons = get_posts([
         'post_type' => 'lesson',
-        'meta_key' => '_mcp_course_id',
+        'meta_key' => '_course_id',
         'meta_value' => $post->ID,
         'numberposts' => -1,
         'orderby' => 'menu_order',
@@ -447,7 +447,7 @@ function mcp_course_lessons_order_meta_box_html( $post ) {
 function mcp_lesson_topics_order_meta_box_html( $post ) {
     $topics = get_posts([
         'post_type' => 'topic',
-        'meta_key' => '_mcp_lesson_id',
+        'meta_key' => '_lesson_id',
         'meta_value' => $post->ID,
         'numberposts' => -1,
         'orderby' => 'menu_order',
@@ -537,7 +537,7 @@ function mcp_save_meta_box_data( $post_id ) {
     if ( isset( $_POST['mcp_english_slug_meta_box_nonce'] ) && wp_verify_nonce( $_POST['mcp_english_slug_meta_box_nonce'], 'mcp_save_english_slug_meta_box_data' ) ) {
         if ( array_key_exists( 'mcp_english_slug', $_POST ) ) {
             $slug = sanitize_title( $_POST['mcp_english_slug'] );
-            update_post_meta( $post_id, '_mcp_english_slug', $slug );
+            update_post_meta( $post_id, '_english_slug', $slug );
 
             // Sync with the native WordPress slug
             if ( ! wp_is_post_revision( $post_id ) ) {
@@ -550,25 +550,25 @@ function mcp_save_meta_box_data( $post_id ) {
 
     if ( isset( $_POST['mcp_lesson_parent_meta_box_nonce'] ) && wp_verify_nonce( $_POST['mcp_lesson_parent_meta_box_nonce'], 'mcp_save_lesson_parent_meta_box_data' ) ) {
         if ( array_key_exists( 'mcp_course_id', $_POST ) ) {
-            update_post_meta( $post_id, '_mcp_course_id', absint( $_POST['mcp_course_id'] ) );
+            update_post_meta( $post_id, '_course_id', absint( $_POST['mcp_course_id'] ) );
         }
     }
 
     if ( isset( $_POST['mcp_topic_course_meta_box_nonce'] ) && wp_verify_nonce( $_POST['mcp_topic_course_meta_box_nonce'], 'mcp_save_topic_course_meta_box_data' ) ) {
         if ( array_key_exists( 'mcp_topic_course_id', $_POST ) ) {
-            update_post_meta( $post_id, '_mcp_course_id', absint( $_POST['mcp_topic_course_id'] ) );
+            update_post_meta( $post_id, '_course_id', absint( $_POST['mcp_topic_course_id'] ) );
         }
     }
 
     if ( isset( $_POST['mcp_topic_parent_meta_box_nonce'] ) && wp_verify_nonce( $_POST['mcp_topic_parent_meta_box_nonce'], 'mcp_save_topic_parent_meta_box_data' ) ) {
         if ( array_key_exists( 'mcp_lesson_id', $_POST ) ) {
-            update_post_meta( $post_id, '_mcp_lesson_id', absint( $_POST['mcp_lesson_id'] ) );
+            update_post_meta( $post_id, '_lesson_id', absint( $_POST['mcp_lesson_id'] ) );
         }
     }
 
     if ( isset( $_POST['mcp_flashcard_parent_meta_box_nonce'] ) && wp_verify_nonce( $_POST['mcp_flashcard_parent_meta_box_nonce'], 'mcp_save_flashcard_parent_meta_box_data' ) ) {
         if ( array_key_exists( 'mcp_topic_id', $_POST ) ) {
-            update_post_meta( $post_id, '_mcp_topic_id', absint( $_POST['mcp_topic_id'] ) );
+            update_post_meta( $post_id, '_topic_id', absint( $_POST['mcp_topic_id'] ) );
         }
     }
 
@@ -583,16 +583,16 @@ function mcp_save_meta_box_data( $post_id ) {
                     ];
                 }
             }
-            update_post_meta( $post_id, '_mcp_sections', $sections );
+            update_post_meta( $post_id, '_sections', $sections );
         }
     }
 
     if ( isset( $_POST['mcp_flashcard_details_meta_box_nonce'] ) && wp_verify_nonce( $_POST['mcp_flashcard_details_meta_box_nonce'], 'mcp_save_flashcard_details_meta_box_data' ) ) {
         if ( array_key_exists( 'mcp_question', $_POST ) ) {
-            update_post_meta( $post_id, '_mcp_question', sanitize_textarea_field( $_POST['mcp_question'] ) );
+            update_post_meta( $post_id, '_question', sanitize_textarea_field( $_POST['mcp_question'] ) );
         }
         if ( array_key_exists( 'mcp_answer', $_POST ) ) {
-            update_post_meta( $post_id, '_mcp_answer', sanitize_textarea_field( $_POST['mcp_answer'] ) );
+            update_post_meta( $post_id, '_answer', sanitize_textarea_field( $_POST['mcp_answer'] ) );
         }
     }
 
@@ -602,7 +602,7 @@ function mcp_save_meta_box_data( $post_id ) {
 
             $existing_ids = get_posts([
                 'post_type' => 'flashcard',
-                'meta_key' => '_mcp_topic_id',
+                'meta_key' => '_topic_id',
                 'meta_value' => $post_id,
                 'fields' => 'ids'
             ]);
@@ -626,8 +626,8 @@ function mcp_save_meta_box_data( $post_id ) {
                         'post_title' => wp_trim_words( $question, 10, '...' ),
                     ];
                     wp_update_post( $post_data );
-                    update_post_meta( $flashcard_id, '_mcp_question', $question );
-                    update_post_meta( $flashcard_id, '_mcp_answer', $answer );
+                    update_post_meta( $flashcard_id, '_question', $question );
+                    update_post_meta( $flashcard_id, '_answer', $answer );
                     $submitted_ids[] = $flashcard_id;
                 } else {
                     $post_data = [
@@ -636,9 +636,9 @@ function mcp_save_meta_box_data( $post_id ) {
                         'post_status' => 'publish'
                     ];
                     $new_flashcard_id = wp_insert_post( $post_data );
-                    update_post_meta( $new_flashcard_id, '_mcp_topic_id', $post_id );
-                    update_post_meta( $new_flashcard_id, '_mcp_question', $question );
-                    update_post_meta( $new_flashcard_id, '_mcp_answer', $answer );
+                    update_post_meta( $new_flashcard_id, '_topic_id', $post_id );
+                    update_post_meta( $new_flashcard_id, '_question', $question );
+                    update_post_meta( $new_flashcard_id, '_answer', $answer );
                 }
             }
 

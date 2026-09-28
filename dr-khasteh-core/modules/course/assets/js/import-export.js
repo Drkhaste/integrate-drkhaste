@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
 
         if (courseId) {
             $.post(mcp_ajax.ajax_url, {
-                action: 'mcp_get_lessons_by_course',
+                action: 'dr_khasteh_get_lessons_by_course',
                 course_id: courseId
             }, function(response) {
                 if (response.success) {
@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
 
         if (lessonId) {
             $.post(mcp_ajax.ajax_url, {
-                action: 'mcp_get_topics_by_lesson',
+                action: 'dr_khasteh_get_topics_by_lesson',
                 lesson_id: lessonId
             }, function(response) {
                 if (response.success) {

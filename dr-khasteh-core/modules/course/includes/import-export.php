@@ -279,7 +279,7 @@ function mcp_handle_export_request() {
             fputcsv( $output, [ 'question', 'answer' ] );
             $items = get_posts([
                 'post_type' => 'flashcard',
-                'meta_key' => '_mcp_topic_id',
+                'meta_key' => '_topic_id',
                 'meta_value' => $topic_id,
                 'numberposts' => -1,
                 'orderby' => 'date',
@@ -287,14 +287,14 @@ function mcp_handle_export_request() {
             ]);
             foreach ( $items as $item ) {
                 fputcsv( $output, [
-                    get_post_meta( $item->ID, '_mcp_question', true ),
-                    get_post_meta( $item->ID, '_mcp_answer', true )
+                    get_post_meta( $item->ID, '_question', true ),
+                    get_post_meta( $item->ID, '_answer', true )
                 ]);
             }
             break;
         case 'sections':
             fputcsv( $output, [ 'section_type', 'content' ] );
-            $sections = get_post_meta( $topic_id, '_mcp_sections', true );
+            $sections = get_post_meta( $topic_id, '_sections', true );
             if ( ! empty( $sections ) ) {
                 foreach ( $sections as $section ) {
                     $section_type = get_post( $section['section_type'] );
@@ -394,9 +394,9 @@ function mcp_handle_import_request() {
                         'post_status' => $import_status,
                     ]);
                     if ( $post_id ) {
-                        update_post_meta( $post_id, '_mcp_topic_id', $topic_id );
-                        update_post_meta( $post_id, '_mcp_question', sanitize_textarea_field( $data['question'] ) );
-                        update_post_meta( $post_id, '_mcp_answer', sanitize_textarea_field( $data['answer'] ) );
+                        update_post_meta( $post_id, '_topic_id', $topic_id );
+                        update_post_meta( $post_id, '_question', sanitize_textarea_field( $data['question'] ) );
+                        update_post_meta( $post_id, '_answer', sanitize_textarea_field( $data['answer'] ) );
                         $imported_count++;
                     }
                     break;
@@ -430,9 +430,9 @@ function mcp_handle_import_request() {
         fclose( $handle );
 
         if ( $content_type === 'sections' ) {
-            $existing_sections = $replace_sections ? [] : ( get_post_meta( $topic_id, '_mcp_sections', true ) ?: [] );
+            $existing_sections = $replace_sections ? [] : ( get_post_meta( $topic_id, '_sections', true ) ?: [] );
             $all_sections = array_merge( $existing_sections, $new_sections );
-            update_post_meta( $topic_id, '_mcp_sections', $all_sections );
+            update_post_meta( $topic_id, '_sections', $all_sections );
         }
     }
 
@@ -446,62 +446,3 @@ function mcp_handle_import_request() {
 }
 add_action( 'init', 'mcp_handle_import_request' );
 
-/**
- * AJAX handler for getting lessons by course.
- */
-function mcp_get_lessons_by_course() {
-    if ( ! isset( $_POST['course_id'] ) || ! is_numeric( $_POST['course_id'] ) ) {
-        wp_send_json_error( 'Invalid course ID' );
-    }
-
-    $course_id = absint( $_POST['course_id'] );
-    $lessons = get_posts([
-        'post_type' => 'lesson',
-        'meta_key' => '_mcp_course_id',
-        'meta_value' => $course_id,
-        'numberposts' => -1,
-        'orderby' => 'date',
-        'order' => 'ASC'
-    ]);
-
-    $response = [];
-    foreach ( $lessons as $lesson ) {
-        $response[] = [
-            'id' => $lesson->ID,
-            'title' => $lesson->post_title
-        ];
-    }
-
-    wp_send_json_success( $response );
-}
-add_action( 'wp_ajax_mcp_get_lessons_by_course', 'mcp_get_lessons_by_course' );
-
-/**
- * AJAX handler for getting topics by lesson.
- */
-function mcp_get_topics_by_lesson() {
-    if ( ! isset( $_POST['lesson_id'] ) || ! is_numeric( $_POST['lesson_id'] ) ) {
-        wp_send_json_error( 'Invalid lesson ID' );
-    }
-
-    $lesson_id = absint( $_POST['lesson_id'] );
-    $topics = get_posts([
-        'post_type' => 'topic',
-        'meta_key' => '_mcp_lesson_id',
-        'meta_value' => $lesson_id,
-        'numberposts' => -1,
-        'orderby' => 'date',
-        'order' => 'ASC'
-    ]);
-
-    $response = [];
-    foreach ( $topics as $topic ) {
-        $response[] = [
-            'id' => $topic->ID,
-            'title' => $topic->post_title
-        ];
-    }
-
-    wp_send_json_success( $response );
-}
-add_action( 'wp_ajax_mcp_get_topics_by_lesson', 'mcp_get_topics_by_lesson' );

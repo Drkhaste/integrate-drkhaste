@@ -119,7 +119,7 @@ function mcp_admin_enqueue_scripts( $hook ) {
             );
             wp_localize_script( 'mcp-sortable-items', 'mcp_sort_ajax', [
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
-                'nonce'    => wp_create_nonce( 'mcp_update_order_nonce' )
+                'nonce'    => wp_create_nonce( 'dr_khasteh_order_nonce' )
             ] );
         }
     }
@@ -405,27 +405,27 @@ function mcp_get_permalink( $post_id ) {
 
     switch ( $post_type ) {
         case 'topic':
-            $topic_slug = get_post_meta( $post_id, '_mcp_english_slug', true );
-            $lesson_id = get_post_meta( $post_id, '_mcp_lesson_id', true );
+            $topic_slug = get_post_meta( $post_id, '_english_slug', true );
+            $lesson_id = get_post_meta( $post_id, '_lesson_id', true );
             if ( $lesson_id ) {
-                $lesson_slug = get_post_meta( $lesson_id, '_mcp_english_slug', true );
-                $course_id = get_post_meta( $lesson_id, '_mcp_course_id', true );
+                $lesson_slug = get_post_meta( $lesson_id, '_english_slug', true );
+                $course_id = get_post_meta( $lesson_id, '_course_id', true );
                 if ( $course_id ) {
-                    $course_slug = get_post_meta( $course_id, '_mcp_english_slug', true );
+                    $course_slug = get_post_meta( $course_id, '_english_slug', true );
                     $slugs = [ $course_slug, $lesson_slug, $topic_slug ];
                 }
             }
             break;
         case 'lesson':
-            $lesson_slug = get_post_meta( $post_id, '_mcp_english_slug', true );
-            $course_id = get_post_meta( $post_id, '_mcp_course_id', true );
+            $lesson_slug = get_post_meta( $post_id, '_english_slug', true );
+            $course_id = get_post_meta( $post_id, '_course_id', true );
             if ( $course_id ) {
-                $course_slug = get_post_meta( $course_id, '_mcp_english_slug', true );
+                $course_slug = get_post_meta( $course_id, '_english_slug', true );
                 $slugs = [ $course_slug, $lesson_slug ];
             }
             break;
         case 'course':
-            $course_slug = get_post_meta( $post_id, '_mcp_english_slug', true );
+            $course_slug = get_post_meta( $post_id, '_english_slug', true );
             $slugs = [ $course_slug ];
             break;
     }
@@ -473,70 +473,3 @@ function mcp_create_section_type_ajax_handler() {
 }
 add_action( 'wp_ajax_mcp_create_section_type', 'mcp_create_section_type_ajax_handler' );
 
-/**
- * AJAX handler for getting lessons by course.
- */
-function mcp_get_lessons_by_course_ajax_handler() {
-    if ( ! current_user_can( 'edit_posts' ) ) {
-        wp_send_json_error( [ 'message' => 'Permission denied.' ] );
-    }
-
-    $course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
-
-    if ( ! $course_id ) {
-        wp_send_json_error( [ 'message' => 'Invalid course ID.' ] );
-    }
-
-    $lessons = get_posts( [
-        'post_type'  => 'lesson',
-        'meta_key'   => '_mcp_course_id',
-        'meta_value' => $course_id,
-        'numberposts' => -1,
-        'orderby'    => 'title',
-        'order'      => 'ASC'
-    ] );
-
-    $data = [];
-    foreach ( $lessons as $lesson ) {
-        $data[] = [
-            'id'    => $lesson->ID,
-            'title' => $lesson->post_title,
-        ];
-    }
-
-    wp_send_json_success( $data );
-}
-add_action( 'wp_ajax_mcp_get_lessons_by_course', 'mcp_get_lessons_by_course_ajax_handler' );
-
-/**
- * AJAX handler for updating items order.
- */
-function mcp_update_items_order_ajax_handler() {
-    check_ajax_referer( 'mcp_update_order_nonce', 'nonce' );
-
-    if ( ! current_user_can( 'edit_posts' ) ) {
-        wp_send_json_error( [ 'message' => 'Permission denied.' ] );
-    }
-
-    $order = isset( $_POST['order'] ) ? array_map( 'absint', $_POST['order'] ) : [];
-
-    if ( empty( $order ) ) {
-        wp_send_json_error( [ 'message' => 'No order data provided.' ] );
-    }
-
-    // Unhook validation to prevent status changes during reordering
-    remove_action( 'save_post', 'mcp_save_meta_box_data' );
-
-    foreach ( $order as $index => $post_id ) {
-        wp_update_post( [
-            'ID'         => $post_id,
-            'menu_order' => $index,
-        ] );
-    }
-
-    // Re-hook validation
-    add_action( 'save_post', 'mcp_save_meta_box_data' );
-
-    wp_send_json_success( [ 'message' => 'Order updated successfully.' ] );
-}
-add_action( 'wp_ajax_mcp_update_items_order', 'mcp_update_items_order_ajax_handler' );

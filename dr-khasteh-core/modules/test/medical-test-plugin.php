@@ -36,7 +36,7 @@ add_action('wp_enqueue_scripts', 'mtp_enqueue_assets');
 
 function mtp_admin_assets($hook) {
     global $post;
-    $mtp_types = ['course', 'lesson', 'topic', 'mtp_test'];
+    $mtp_types = ['course', 'lesson', 'topic', 'test'];
     if ( ( $hook == 'post-new.php' || $hook == 'post.php' ) && isset($post->post_type) && in_array($post->post_type, $mtp_types) ) {
         wp_enqueue_editor();
         wp_enqueue_style('mtp-admin-css', MTP_PLUGIN_URL . 'assets/css/admin-styles.css', [], '2.1.0');
@@ -46,7 +46,7 @@ function mtp_admin_assets($hook) {
         if (in_array($post->post_type, ['course', 'lesson'])) {
             wp_enqueue_script('jquery-ui-sortable');
             wp_enqueue_script('mtp-sortable', MTP_PLUGIN_URL . 'assets/js/sortable-items.js', ['jquery', 'jquery-ui-sortable'], '1.0.0', true);
-            wp_localize_script('mtp-sortable', 'mtp_sort_ajax', ['ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('mtp_update_order_nonce')]);
+            wp_localize_script('mtp-sortable', 'mtp_sort_ajax', ['ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('dr_khasteh_order_nonce')]);
         }
     }
     if ( strpos( $hook, 'mtp-csv-import' ) !== false || strpos( $hook, 'mtp-csv-export' ) !== false ) {
@@ -183,34 +183,3 @@ function mtp_landing_template_redirect() {
 }
 add_action( 'template_redirect', 'mtp_landing_template_redirect', 5 );
 
-/**
- * AJAX handlers for dependent dropdowns.
- */
-function mtp_get_lessons_by_course_ajax_handler() {
-    if ( ! current_user_can( 'edit_posts' ) ) wp_send_json_error( [ 'message' => 'Permission denied.' ] );
-    $course_id = isset( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
-    $lessons = get_posts( [ 'post_type'  => 'lesson', 'meta_key'   => '_mcp_course_id', 'meta_value' => $course_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
-    $data = [];
-    foreach ( $lessons as $lesson ) $data[] = [ 'id' => $lesson->ID, 'title' => $lesson->post_title ];
-    wp_send_json_success( $data );
-}
-add_action( 'wp_ajax_mtp_get_lessons_by_course', 'mtp_get_lessons_by_course_ajax_handler' );
-
-function mtp_get_topics_by_lesson_ajax_handler() {
-    if ( ! current_user_can( 'edit_posts' ) ) wp_send_json_error( [ 'message' => 'Permission denied.' ] );
-    $lesson_id = isset( $_POST['lesson_id'] ) ? absint( $_POST['lesson_id'] ) : 0;
-    $topics = get_posts( [ 'post_type'  => 'topic', 'meta_key'   => '_mcp_lesson_id', 'meta_value' => $lesson_id, 'numberposts' => -1, 'orderby'    => 'title', 'order'      => 'ASC' ] );
-    $data = [];
-    foreach ( $topics as $topic ) $data[] = [ 'id' => $topic->ID, 'title' => $topic->post_title ];
-    wp_send_json_success( $data );
-}
-add_action( 'wp_ajax_mtp_get_topics_by_lesson', 'mtp_get_topics_by_lesson_ajax_handler' );
-
-function mtp_update_items_order_ajax_handler() {
-    check_ajax_referer( 'mtp_update_order_nonce', 'nonce' );
-    if ( ! current_user_can( 'edit_posts' ) ) wp_send_json_error();
-    $order = isset( $_POST['order'] ) ? array_map( 'absint', $_POST['order'] ) : [];
-    foreach ( $order as $index => $post_id ) wp_update_post( [ 'ID' => $post_id, 'menu_order' => $index ] );
-    wp_send_json_success();
-}
-add_action( 'wp_ajax_mtp_update_items_order', 'mtp_update_items_order_ajax_handler' );

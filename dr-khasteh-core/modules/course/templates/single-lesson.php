@@ -1,7 +1,7 @@
 <?php
     get_header();
     $lesson_id = get_the_ID();
-    $course_id = get_post_meta( $lesson_id, '_mcp_course_id', true );
+    $course_id = get_post_meta( $lesson_id, '_course_id', true );
 ?>
 
 <main class="container">
@@ -19,7 +19,7 @@
         <?php
         $topics = get_posts([
             'post_type' => 'topic',
-            'meta_key' => '_mcp_lesson_id',
+            'meta_key' => '_lesson_id',
             'meta_value' => $lesson_id,
             'numberposts' => -1,
             'orderby' => [ 'menu_order' => 'ASC', 'date' => 'ASC' ]
@@ -32,7 +32,7 @@
                 <li class="topic-list-item">
                     <span><?php echo get_the_title( $topic->ID ); ?></span>
                     <?php
-                        $topic_slug = get_post_meta( $topic->ID, '_mcp_english_slug', true );
+                        $topic_slug = get_post_meta( $topic->ID, '_english_slug', true );
                     ?>
                     <div class="topic-buttons">
                         <a href="<?php echo mcp_get_permalink( $topic->ID ); ?>" class="btn-topic"><?php echo esc_html__( 'درسنامه', 'med-course-plugin' ); ?></a>
