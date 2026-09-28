@@ -2,8 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 function mtp_add_import_export_menu() {
-    add_submenu_page( 'course_builder_page', 'ایمپورت CSV', 'ایمپورت CSV', 'manage_options', 'mtp-csv-import', 'mtp_render_import_page' );
-    add_submenu_page( 'course_builder_page', 'اکسپورت CSV', 'اکسپورت CSV', 'manage_options', 'mtp-csv-export', 'mtp_render_export_page' );
+    add_submenu_page( 'course_builder_page', 'ایمپورت آزمون (CSV)', 'ایمپورت آزمون', 'manage_options', 'mtp-csv-import', 'mtp_render_import_page' );
+    add_submenu_page( 'course_builder_page', 'اکسپورت آزمون (CSV)', 'اکسپورت آزمون', 'manage_options', 'mtp-csv-export', 'mtp_render_export_page' );
 }
 add_action( 'admin_menu', 'mtp_add_import_export_menu' );
 

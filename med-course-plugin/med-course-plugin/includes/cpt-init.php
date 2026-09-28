@@ -178,15 +178,17 @@ add_action( 'init', 'mcp_register_post_types' );
  * Setup custom admin menu.
  */
 function mcp_admin_menu_setup() {
-    add_menu_page(
-        'کورس ساز',                 // page_title
-        'کورس ساز',                 // menu_title
-        'manage_options',             // capability
-        'course_builder_page',        // menu_slug
-        null,                         // function
-        'dashicons-welcome-learn-more', // icon_url
-        1                             // position
-    );
+    if ( empty( $GLOBALS['admin_page_hooks']['course_builder_page'] ) ) {
+        add_menu_page(
+            'کورس ساز',
+            'کورس ساز',
+            'manage_options',
+            'course_builder_page',
+            'mcp_leitner_page_callback',
+            'dashicons-welcome-learn-more',
+            1
+        );
+    }
 
     add_submenu_page(
         'course_builder_page',
