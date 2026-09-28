@@ -30,7 +30,7 @@ class Dr_Khasteh_Core {
     }
 
     private function __construct() {
-        add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 1 );
+        add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 5 );
         $this->load_modules();
     }
 
@@ -43,7 +43,7 @@ class Dr_Khasteh_Core {
                 'course_builder_page',
                 'dr_khasteh_core_admin_page_callback',
                 'dashicons-welcome-learn-more',
-                1
+                5
             );
         }
     }

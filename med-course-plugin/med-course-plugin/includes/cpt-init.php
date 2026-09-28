@@ -186,7 +186,7 @@ function mcp_admin_menu_setup() {
             'course_builder_page',
             'mcp_leitner_page_callback',
             'dashicons-welcome-learn-more',
-            1
+            5
         );
     }
 
