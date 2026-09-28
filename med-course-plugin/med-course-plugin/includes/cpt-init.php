@@ -11,98 +11,104 @@ function mcp_register_post_types() {
     /**
      * Post Type: Courses.
      */
-    $labels = [
-        "name" => __( "Courses", "med-course-plugin" ),
-        "singular_name" => __( "Course", "med-course-plugin" ),
-    ];
-    $args = [
-        "label" => __( "Courses", "med-course-plugin" ),
-        "labels" => $labels,
-        "description" => "",
-        "public" => true,
-        "publicly_queryable" => true,
-        "show_ui" => true,
-        "show_in_rest" => true,
-        "rest_base" => "",
-        "rest_controller_class" => "WP_REST_Posts_Controller",
-        "has_archive" => false,
-        "show_in_menu" => "course_builder_page",
-        "show_in_nav_menus" => true,
-        "delete_with_user" => false,
-        "exclude_from_search" => false,
-        "capability_type" => "post",
-        "map_meta_cap" => true,
-        "hierarchical" => false,
-        "rewrite" => false,
-        "query_var" => true,
-        "menu_icon" => "dashicons-welcome-learn-more",
-        "supports" => [ "title", "editor", "thumbnail" ],
-    ];
-    register_post_type( "course", $args );
+    if ( ! post_type_exists( "course" ) ) {
+        $labels = [
+            "name" => __( "Courses", "med-course-plugin" ),
+            "singular_name" => __( "Course", "med-course-plugin" ),
+        ];
+        $args = [
+            "label" => __( "Courses", "med-course-plugin" ),
+            "labels" => $labels,
+            "description" => "",
+            "public" => true,
+            "publicly_queryable" => true,
+            "show_ui" => true,
+            "show_in_rest" => true,
+            "rest_base" => "",
+            "rest_controller_class" => "WP_REST_Posts_Controller",
+            "has_archive" => false,
+            "show_in_menu" => "course_builder_page",
+            "show_in_nav_menus" => true,
+            "delete_with_user" => false,
+            "exclude_from_search" => false,
+            "capability_type" => "post",
+            "map_meta_cap" => true,
+            "hierarchical" => false,
+            "rewrite" => false,
+            "query_var" => true,
+            "menu_icon" => "dashicons-welcome-learn-more",
+            "supports" => [ "title", "editor", "thumbnail" ],
+        ];
+        register_post_type( "course", $args );
+    }
 
     /**
      * Post Type: Lessons.
      */
-    $labels = [
-        "name" => __( "Lessons", "med-course-plugin" ),
-        "singular_name" => __( "Lesson", "med-course-plugin" ),
-    ];
-    $args = [
-        "label" => __( "Lessons", "med-course-plugin" ),
-        "labels" => $labels,
-        "description" => "",
-        "public" => true,
-        "publicly_queryable" => true,
-        "show_ui" => true,
-        "show_in_rest" => true,
-        "rest_base" => "",
-        "rest_controller_class" => "WP_REST_Posts_Controller",
-        "has_archive" => false,
-        "show_in_menu" => "course_builder_page",
-        "show_in_nav_menus" => true,
-        "delete_with_user" => false,
-        "exclude_from_search" => false,
-        "capability_type" => "post",
-        "map_meta_cap" => true,
-        "hierarchical" => false,
-        "rewrite" => false,
-        "query_var" => true,
-        "menu_icon" => "dashicons-book",
-        "supports" => [ "title", "editor", "thumbnail", "page-attributes" ],
-    ];
-    register_post_type( "lesson", $args );
+    if ( ! post_type_exists( "lesson" ) ) {
+        $labels = [
+            "name" => __( "Lessons", "med-course-plugin" ),
+            "singular_name" => __( "Lesson", "med-course-plugin" ),
+        ];
+        $args = [
+            "label" => __( "Lessons", "med-course-plugin" ),
+            "labels" => $labels,
+            "description" => "",
+            "public" => true,
+            "publicly_queryable" => true,
+            "show_ui" => true,
+            "show_in_rest" => true,
+            "rest_base" => "",
+            "rest_controller_class" => "WP_REST_Posts_Controller",
+            "has_archive" => false,
+            "show_in_menu" => "course_builder_page",
+            "show_in_nav_menus" => true,
+            "delete_with_user" => false,
+            "exclude_from_search" => false,
+            "capability_type" => "post",
+            "map_meta_cap" => true,
+            "hierarchical" => false,
+            "rewrite" => false,
+            "query_var" => true,
+            "menu_icon" => "dashicons-book",
+            "supports" => [ "title", "editor", "thumbnail", "page-attributes" ],
+        ];
+        register_post_type( "lesson", $args );
+    }
 
     /**
      * Post Type: Topics.
      */
-    $labels = [
-        "name" => __( "Topics", "med-course-plugin" ),
-        "singular_name" => __( "Topic", "med-course-plugin" ),
-    ];
-    $args = [
-        "label" => __( "Topics", "med-course-plugin" ),
-        "labels" => $labels,
-        "description" => "",
-        "public" => true,
-        "publicly_queryable" => true,
-        "show_ui" => true,
-        "show_in_rest" => true,
-        "rest_base" => "",
-        "rest_controller_class" => "WP_REST_Posts_Controller",
-        "has_archive" => false,
-        "show_in_menu" => "course_builder_page",
-        "show_in_nav_menus" => true,
-        "delete_with_user" => false,
-        "exclude_from_search" => false,
-        "capability_type" => "post",
-        "map_meta_cap" => true,
-        "hierarchical" => false,
-        "rewrite" => false,
-        "query_var" => true,
-        "menu_icon" => "dashicons-analytics",
-        "supports" => [ "title", "editor", "thumbnail", "page-attributes" ],
-    ];
-    register_post_type( "topic", $args );
+    if ( ! post_type_exists( "topic" ) ) {
+        $labels = [
+            "name" => __( "Topics", "med-course-plugin" ),
+            "singular_name" => __( "Topic", "med-course-plugin" ),
+        ];
+        $args = [
+            "label" => __( "Topics", "med-course-plugin" ),
+            "labels" => $labels,
+            "description" => "",
+            "public" => true,
+            "publicly_queryable" => true,
+            "show_ui" => true,
+            "show_in_rest" => true,
+            "rest_base" => "",
+            "rest_controller_class" => "WP_REST_Posts_Controller",
+            "has_archive" => false,
+            "show_in_menu" => "course_builder_page",
+            "show_in_nav_menus" => true,
+            "delete_with_user" => false,
+            "exclude_from_search" => false,
+            "capability_type" => "post",
+            "map_meta_cap" => true,
+            "hierarchical" => false,
+            "rewrite" => false,
+            "query_var" => true,
+            "menu_icon" => "dashicons-analytics",
+            "supports" => [ "title", "editor", "thumbnail", "page-attributes" ],
+        ];
+        register_post_type( "topic", $args );
+    }
 
     /**
      * Post Type: Flashcards.
