@@ -15,6 +15,16 @@ define( 'DR_KHASTEH_CORE_VERSION', '1.0.0' );
 define( 'DR_KHASTEH_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'DR_KHASTEH_CORE_URL', plugin_dir_url( __FILE__ ) );
 
+if ( ! defined( 'MIND_MAP_STUDIO_VERSION' ) ) {
+    define( 'MIND_MAP_STUDIO_VERSION', '1.1.0' );
+}
+if ( ! defined( 'MIND_MAP_STUDIO_PATH' ) ) {
+    define( 'MIND_MAP_STUDIO_PATH', DR_KHASTEH_CORE_PATH );
+}
+if ( ! defined( 'MIND_MAP_STUDIO_URL' ) ) {
+    define( 'MIND_MAP_STUDIO_URL', DR_KHASTEH_CORE_URL );
+}
+
 /**
  * Main Class
  */
@@ -31,7 +41,7 @@ class Dr_Khasteh_Core {
 
     private function __construct() {
         add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 5 );
-        $this->load_modules();
+        $this->load_includes();
     }
 
     public function register_admin_menu() {
@@ -48,13 +58,18 @@ class Dr_Khasteh_Core {
         }
     }
 
-    private function load_modules() {
-        // Load Core CPTs and Admin Menu if exists
+    private function load_includes() {
+        // Load Central CPT Registrations & Rewrite Rules
         if ( file_exists( DR_KHASTEH_CORE_PATH . 'includes/cpt-init.php' ) ) {
             require_once DR_KHASTEH_CORE_PATH . 'includes/cpt-init.php';
         }
 
-        // Load Course Module
+        // Load Central Shared AJAX Handlers
+        if ( file_exists( DR_KHASTEH_CORE_PATH . 'includes/ajax-init.php' ) ) {
+            require_once DR_KHASTEH_CORE_PATH . 'includes/ajax-init.php';
+        }
+
+        // Load Course & Leitner Modules
         if ( file_exists( DR_KHASTEH_CORE_PATH . 'modules/course/course-module.php' ) ) {
             require_once DR_KHASTEH_CORE_PATH . 'modules/course/course-module.php';
         }
@@ -67,6 +82,14 @@ class Dr_Khasteh_Core {
         // Load Mind Map Module
         if ( file_exists( DR_KHASTEH_CORE_PATH . 'modules/mindmap/mindmap-module.php' ) ) {
             require_once DR_KHASTEH_CORE_PATH . 'modules/mindmap/mindmap-module.php';
+        }
+
+        // Load Mind Map Studio Core Class if present
+        if ( file_exists( DR_KHASTEH_CORE_PATH . 'includes/MindMaps/class-mind-map-studio.php' ) ) {
+            require_once DR_KHASTEH_CORE_PATH . 'includes/MindMaps/class-mind-map-studio.php';
+            if ( class_exists( 'Mind_Map_Studio' ) && ! has_action( 'plugins_loaded', array( 'Mind_Map_Studio', 'init' ) ) ) {
+                add_action( 'plugins_loaded', array( 'Mind_Map_Studio', 'init' ), 15 );
+            }
         }
     }
 }
