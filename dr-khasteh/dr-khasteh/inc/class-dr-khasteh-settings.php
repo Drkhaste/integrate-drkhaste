@@ -290,6 +290,21 @@ class Dr_Khasteh_Settings {
 			)
 		);
 
+		register_setting(
+			'dr_khasteh_general_group',
+			'dr_khasteh_theme_colors',
+			array(
+				'sanitize_callback' => array( __CLASS__, 'sanitize_theme_colors' ),
+				'default'           => array(
+					'primary_color'   => '#0f766e',
+					'bg_card'         => '#ffffff',
+					'border_color'    => '#e2e8f0',
+					'card_radius'     => 12,
+					'font_size_base'  => 16,
+				),
+			)
+		);
+
 	}
 
 	public static function sanitize_highlights( $raw ) {
@@ -362,6 +377,25 @@ class Dr_Khasteh_Settings {
 		}
 		add_action( 'shutdown', array( 'Dr_Khasteh_Text_Styler_CSS_Generator', 'regenerate' ) );
 		return $clean;
+	}
+
+	public static function sanitize_theme_colors( $raw ) {
+		if ( ! is_array( $raw ) ) {
+			return array(
+				'primary_color'   => '#0f766e',
+				'bg_card'         => '#ffffff',
+				'border_color'    => '#e2e8f0',
+				'card_radius'     => 12,
+				'font_size_base'  => 16,
+			);
+		}
+		return array(
+			'primary_color'  => sanitize_hex_color( $raw['primary_color'] ?? '#0f766e' ),
+			'bg_card'        => sanitize_hex_color( $raw['bg_card'] ?? '#ffffff' ),
+			'border_color'   => sanitize_hex_color( $raw['border_color'] ?? '#e2e8f0' ),
+			'card_radius'    => absint( $raw['card_radius'] ?? 12 ),
+			'font_size_base' => absint( $raw['font_size_base'] ?? 16 ),
+		);
 	}
 
 	public static function sanitize_post_types( $raw ) {
@@ -463,6 +497,49 @@ class Dr_Khasteh_Settings {
 				$logo_width = get_option( 'dr_khasteh_logo_width', 150 );
 				$font_settings_pt = get_option( 'dr_khasteh_font_settings_post_types', array( 'topic' ) );
 				?>
+
+				<?php
+				$theme_colors = get_option( 'dr_khasteh_theme_colors', array(
+					'primary_color'  => '#0f766e',
+					'bg_card'        => '#ffffff',
+					'border_color'   => '#e2e8f0',
+					'card_radius'    => 12,
+					'font_size_base' => 16,
+				) );
+				?>
+				<h2>ادیتور ظاهر و استایل‌های اصلی پوسته (Theme Style Editor)</h2>
+				<table class="form-table">
+					<tr>
+						<th scope="row">رنگ اصلی برند (Primary Color)</th>
+						<td>
+							<input type="color" name="dr_khasteh_theme_colors[primary_color]" value="<?php echo esc_attr( $theme_colors['primary_color'] ); ?>" />
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">رنگ پس‌زمینه کارت‌ها و محتوا (Card BG)</th>
+						<td>
+							<input type="color" name="dr_khasteh_theme_colors[bg_card]" value="<?php echo esc_attr( $theme_colors['bg_card'] ); ?>" />
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">رنگ حاشیه‌ها (Border Color)</th>
+						<td>
+							<input type="color" name="dr_khasteh_theme_colors[border_color]" value="<?php echo esc_attr( $theme_colors['border_color'] ); ?>" />
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">انحنا و گردی گوشه‌ها (Border Radius - px)</th>
+						<td>
+							<input type="number" name="dr_khasteh_theme_colors[card_radius]" value="<?php echo esc_attr( $theme_colors['card_radius'] ); ?>" />
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">اندازه فونت پایه متون (Font Size - px)</th>
+						<td>
+							<input type="number" name="dr_khasteh_theme_colors[font_size_base]" value="<?php echo esc_attr( $theme_colors['font_size_base'] ); ?>" />
+						</td>
+					</tr>
+				</table>
 
 				<h2><?php esc_html_e( 'Logo Settings', 'dr-khasteh' ); ?></h2>
 				<table class="form-table">

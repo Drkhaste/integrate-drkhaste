@@ -223,6 +223,16 @@ body.dark-mode .font-size-controls {
 
 .entry-content {
     line-height: 1.8;
+    font-size: var(--font-size-base, 16px);
+}
+
+.content-card {
+    background: var(--bg-card);
+    border-radius: var(--card-radius, 12px);
+    padding: 30px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
 .entry-content img {

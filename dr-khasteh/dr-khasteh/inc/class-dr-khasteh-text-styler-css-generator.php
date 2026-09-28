@@ -32,7 +32,24 @@ class Dr_Khasteh_Text_Styler_CSS_Generator {
 		$custom     = Dr_Khasteh_Settings::get_custom_styles();
 		$symbols    = get_option( 'dr_khasteh_custom_symbols', Dr_Khasteh_Text_Styler_Defaults::symbols() );
 
-		$css = "/* Dr. Khasteh Text Styler – Dynamic CSS */\n";
+		$theme_colors = get_option( 'dr_khasteh_theme_colors', array(
+			'primary_color'  => '#0f766e',
+			'bg_card'        => '#ffffff',
+			'border_color'   => '#e2e8f0',
+			'card_radius'    => 12,
+			'font_size_base' => 16,
+		) );
+
+		$css = "/* Dr. Khasteh Theme Root Dynamic Variables */\n";
+		$css .= ":root {\n";
+		if ( ! empty( $theme_colors['primary_color'] ) )  $css .= "  --primary: {$theme_colors['primary_color']} !important;\n";
+		if ( ! empty( $theme_colors['bg_card'] ) )        $css .= "  --bg-card: {$theme_colors['bg_card']} !important;\n";
+		if ( ! empty( $theme_colors['border_color'] ) )   $css .= "  --border-color: {$theme_colors['border_color']} !important;\n";
+		if ( ! empty( $theme_colors['card_radius'] ) )    $css .= "  --card-radius: {$theme_colors['card_radius']}px !important;\n";
+		if ( ! empty( $theme_colors['font_size_base'] ) ) $css .= "  --font-size-base: {$theme_colors['font_size_base']}px !important;\n";
+		$css .= "}\n\n";
+
+		$css .= "/* Dr. Khasteh Text Styler – Dynamic CSS */\n";
 		$css .= self::get_tip_box_css();
 
 		// Highlights
