@@ -14,9 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Include the Custom Post Type registration file.
 require_once plugin_dir_path( __FILE__ ) . 'includes/cpt-init.php';
 
-// Include the meta box registration file.
-require_once plugin_dir_path( __FILE__ ) . 'includes/meta-boxes.php';
-
 // Include the admin columns file.
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin-columns.php';
 
@@ -472,4 +469,3 @@ function mcp_create_section_type_ajax_handler() {
     ] );
 }
 add_action( 'wp_ajax_mcp_create_section_type', 'mcp_create_section_type_ajax_handler' );
-

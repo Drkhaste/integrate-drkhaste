@@ -163,7 +163,7 @@ add_action( 'add_meta_boxes', 'dr_khasteh_core_register_meta_boxes' );
  */
 function dr_khasteh_english_slug_meta_box_html( $post ) {
     $slug = get_post_meta( $post->ID, '_english_slug', true );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
     <label for="dr_khasteh_english_slug">Enter a URL-friendly slug:</label>
     <input type="text" id="dr_khasteh_english_slug" name="dr_khasteh_english_slug" value="<?php echo esc_attr( $slug ); ?>" class="widefat">
@@ -177,7 +177,7 @@ function dr_khasteh_english_slug_meta_box_html( $post ) {
 function dr_khasteh_lesson_parent_meta_box_html( $post ) {
     $parent_id = get_post_meta( $post->ID, '_course_id', true );
     $courses = get_posts( [ 'post_type' => 'course', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ] );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
     <label for="mcp_course_id">انتخاب دوره:</label>
     <select id="mcp_course_id" name="mcp_course_id" class="widefat">
@@ -197,7 +197,7 @@ function dr_khasteh_lesson_parent_meta_box_html( $post ) {
 function dr_khasteh_topic_course_meta_box_html( $post ) {
     $course_id = get_post_meta( $post->ID, '_course_id', true );
     $courses = get_posts( [ 'post_type' => 'course', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ] );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
     <label for="mcp_topic_course_id">انتخاب دوره:</label>
     <select id="mcp_topic_course_id" name="mcp_topic_course_id" class="widefat">
@@ -217,7 +217,7 @@ function dr_khasteh_topic_course_meta_box_html( $post ) {
 function dr_khasteh_topic_parent_meta_box_html( $post ) {
     $parent_id = get_post_meta( $post->ID, '_lesson_id', true );
     $lessons = get_posts( [ 'post_type' => 'lesson', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ] );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
     <label for="mcp_lesson_id">انتخاب درس:</label>
     <select id="mcp_lesson_id" name="mcp_lesson_id" class="widefat">
@@ -237,7 +237,7 @@ function dr_khasteh_topic_parent_meta_box_html( $post ) {
 function dr_khasteh_test_parent_meta_box_html( $post ) {
     $parent_id = get_post_meta( $post->ID, '_topic_id', true );
     $topics = get_posts( [ 'post_type' => 'topic', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ] );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
     <label for="mcp_topic_id">انتخاب مبحث:</label>
     <select id="mcp_topic_id" name="mcp_topic_id" class="widefat">
@@ -257,7 +257,7 @@ function dr_khasteh_test_parent_meta_box_html( $post ) {
 function dr_khasteh_flashcard_parent_meta_box_html( $post ) {
     $parent_id = get_post_meta( $post->ID, '_topic_id', true );
     $topics = get_posts( [ 'post_type' => 'topic', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ] );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
     <label for="mcp_topic_id">انتخاب مبحث:</label>
     <select id="mcp_topic_id" name="mcp_topic_id" class="widefat">
@@ -277,7 +277,7 @@ function dr_khasteh_flashcard_parent_meta_box_html( $post ) {
 function dr_khasteh_flashcard_details_meta_box_html( $post ) {
     $question = get_post_meta( $post->ID, '_question', true );
     $answer = get_post_meta( $post->ID, '_answer', true );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
     <p>
         <label for="mcp_question">صورت سوال:</label>
@@ -306,7 +306,7 @@ function dr_khasteh_test_details_meta_box_html( $post ) {
     $correct_option = get_post_meta( $post->ID, '_test_correct_option', true );
     $correct_options = array_filter( array_map( 'trim', explode( ',', $correct_option ) ) );
     $explanation = get_post_meta( $post->ID, '_test_explanation', true );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
     <p><label>شناسه (Identifier):</label><input type="text" name="mtp_identifier" value="<?php echo esc_attr($identifier); ?>" class="widefat"></p>
     <p><label>شماره سوال:</label><input type="text" name="mtp_question_number" value="<?php echo esc_attr($question_number); ?>" class="widefat"></p>
@@ -351,8 +351,9 @@ function dr_khasteh_topic_sections_meta_box_html( $post ) {
         }
     }
 
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
+    <input type="hidden" name="dr_khasteh_topic_sections_posted" value="1">
     <div id="mcp-sections-repeater">
         <div class="mcp-section-template" style="display: none;">
             <div class="mcp-section">
@@ -439,7 +440,7 @@ function dr_khasteh_topic_sections_meta_box_html( $post ) {
 function dr_khasteh_section_type_icon_meta_box_html( $post ) {
     $icon_class = get_post_meta( $post->ID, '_mcp_icon_class', true );
     $is_starred = get_post_meta( $post->ID, '_mcp_is_starred', true );
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
 
     $icons = [
         'fa-user-doctor', 'fa-stethoscope', 'fa-pills', 'fa-notes-medical', 'fa-kit-medical', 'fa-hospital', 'fa-heart-pulse', 'fa-file-medical', 'fa-dna', 'fa-capsules', 'fa-brain', 'fa-book-medical', 'fa-band-aid', 'fa-syringe', 'fa-virus', 'fa-lungs', 'fa-microscope', 'fa-prescription-bottle', 'fa-crutch', 'fa-weight-scale',
@@ -478,8 +479,9 @@ function dr_khasteh_topic_flashcards_meta_box_html( $post ) {
         'orderby' => 'date',
         'order' => 'ASC'
     ]);
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
+    <input type="hidden" name="dr_khasteh_topic_flashcards_posted" value="1">
     <div id="mcp-flashcards-repeater">
         <div class="mcp-flashcard-template" style="display: none;">
             <div class="mcp-flashcard">
@@ -524,8 +526,9 @@ function dr_khasteh_topic_tests_meta_box_html( $post ) {
         'orderby' => 'date',
         'order' => 'ASC'
     ]);
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
     ?>
+    <input type="hidden" name="dr_khasteh_topic_tests_posted" value="1">
     <div id="mtp-tests-repeater">
         <div class="mtp-test-template" style="display: none;">
             <div class="mtp-test">
@@ -607,7 +610,7 @@ function dr_khasteh_course_lessons_order_meta_box_html( $post ) {
         echo '<li>درسی برای این دوره یافت نشد.</li>';
     }
     echo '</ul>';
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
 }
 
 /**
@@ -633,7 +636,7 @@ function dr_khasteh_lesson_topics_order_meta_box_html( $post ) {
         echo '<li>مبحثی برای این درس یافت نشد.</li>';
     }
     echo '</ul>';
-    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce' );
+    wp_nonce_field( 'dr_khasteh_save_meta_box_data', 'dr_khasteh_meta_box_nonce', false );
 }
 
 /**
@@ -653,7 +656,6 @@ function dr_khasteh_core_save_meta_box_data( $post_id ) {
     }
 
     if ( ! isset( $_POST['dr_khasteh_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['dr_khasteh_meta_box_nonce'], 'dr_khasteh_save_meta_box_data' ) ) {
-        // Fallback checks for legacy field names if submitted from API/third-party
         if ( ! isset( $_POST['mcp_english_slug_meta_box_nonce'] ) && ! isset( $_POST['mtp_meta_box_nonce'] ) ) {
             return;
         }
@@ -702,14 +704,16 @@ function dr_khasteh_core_save_meta_box_data( $post_id ) {
     }
 
     // 6. Topic Sections
-    if ( isset( $_POST['mcp_sections'] ) && is_array( $_POST['mcp_sections'] ) ) {
+    if ( isset( $_POST['dr_khasteh_topic_sections_posted'] ) ) {
         $sections = [];
-        foreach ( $_POST['mcp_sections'] as $section ) {
-            if ( ! empty( $section['section_type'] ) ) {
-                $sections[] = [
-                    'section_type' => absint( $section['section_type'] ),
-                    'content' => wp_kses_post( $section['content'] ),
-                ];
+        if ( isset( $_POST['mcp_sections'] ) && is_array( $_POST['mcp_sections'] ) ) {
+            foreach ( $_POST['mcp_sections'] as $section ) {
+                if ( ! empty( $section['section_type'] ) ) {
+                    $sections[] = [
+                        'section_type' => absint( $section['section_type'] ),
+                        'content' => wp_kses_post( $section['content'] ),
+                    ];
+                }
             }
         }
         update_post_meta( $post_id, '_sections', $sections );
@@ -724,7 +728,7 @@ function dr_khasteh_core_save_meta_box_data( $post_id ) {
     }
 
     // 8. Repeater Flashcards on Topic
-    if ( isset( $_POST['mcp_flashcards'] ) && is_array( $_POST['mcp_flashcards'] ) ) {
+    if ( isset( $_POST['dr_khasteh_topic_flashcards_posted'] ) ) {
         remove_action( 'save_post', 'dr_khasteh_core_save_meta_box_data' );
 
         $existing_ids = get_posts([
@@ -736,36 +740,38 @@ function dr_khasteh_core_save_meta_box_data( $post_id ) {
         ]);
         $submitted_ids = [];
 
-        foreach ( $_POST['mcp_flashcards'] as $flashcard_data ) {
-            $flashcard_id = ! empty( $flashcard_data['id'] ) ? absint( $flashcard_data['id'] ) : 0;
-            $question = sanitize_textarea_field( $flashcard_data['question'] );
-            $answer = sanitize_textarea_field( $flashcard_data['answer'] );
+        if ( isset( $_POST['mcp_flashcards'] ) && is_array( $_POST['mcp_flashcards'] ) ) {
+            foreach ( $_POST['mcp_flashcards'] as $flashcard_data ) {
+                $flashcard_id = ! empty( $flashcard_data['id'] ) ? absint( $flashcard_data['id'] ) : 0;
+                $question = sanitize_textarea_field( $flashcard_data['question'] );
+                $answer = sanitize_textarea_field( $flashcard_data['answer'] );
 
-            if ( empty( $question ) && empty( $answer ) ) {
-                if ( $flashcard_id ) {
-                    wp_delete_post( $flashcard_id, true );
+                if ( empty( $question ) && empty( $answer ) ) {
+                    if ( $flashcard_id ) {
+                        wp_delete_post( $flashcard_id, true );
+                    }
+                    continue;
                 }
-                continue;
-            }
 
-            if ( $flashcard_id ) {
-                wp_update_post( [
-                    'ID' => $flashcard_id,
-                    'post_title' => wp_trim_words( $question, 10, '...' ),
-                ] );
-                update_post_meta( $flashcard_id, '_question', $question );
-                update_post_meta( $flashcard_id, '_answer', $answer );
-                $submitted_ids[] = $flashcard_id;
-            } else {
-                $new_flashcard_id = wp_insert_post( [
-                    'post_title' => wp_trim_words( $question, 10, '...' ),
-                    'post_type' => 'flashcard',
-                    'post_status' => 'publish'
-                ] );
-                if ( $new_flashcard_id ) {
-                    update_post_meta( $new_flashcard_id, '_topic_id', $post_id );
-                    update_post_meta( $new_flashcard_id, '_question', $question );
-                    update_post_meta( $new_flashcard_id, '_answer', $answer );
+                if ( $flashcard_id ) {
+                    wp_update_post( [
+                        'ID' => $flashcard_id,
+                        'post_title' => wp_trim_words( $question, 10, '...' ),
+                    ] );
+                    update_post_meta( $flashcard_id, '_question', $question );
+                    update_post_meta( $flashcard_id, '_answer', $answer );
+                    $submitted_ids[] = $flashcard_id;
+                } else {
+                    $new_flashcard_id = wp_insert_post( [
+                        'post_title' => wp_trim_words( $question, 10, '...' ),
+                        'post_type' => 'flashcard',
+                        'post_status' => 'publish'
+                    ] );
+                    if ( $new_flashcard_id ) {
+                        update_post_meta( $new_flashcard_id, '_topic_id', $post_id );
+                        update_post_meta( $new_flashcard_id, '_question', $question );
+                        update_post_meta( $new_flashcard_id, '_answer', $answer );
+                    }
                 }
             }
         }
@@ -800,7 +806,7 @@ function dr_khasteh_core_save_meta_box_data( $post_id ) {
     }
 
     // 10. Repeater Tests on Topic
-    if ( isset( $_POST['mtp_tests'] ) && is_array( $_POST['mtp_tests'] ) ) {
+    if ( isset( $_POST['dr_khasteh_topic_tests_posted'] ) ) {
         remove_action( 'save_post', 'dr_khasteh_core_save_meta_box_data' );
 
         $existing_ids = get_posts([
@@ -812,50 +818,52 @@ function dr_khasteh_core_save_meta_box_data( $post_id ) {
         ]);
         $submitted_ids = [];
 
-        foreach ( $_POST['mtp_tests'] as $test_data ) {
-            $test_id = ! empty( $test_data['id'] ) ? absint( $test_data['id'] ) : 0;
-            $question = wp_kses_post( $test_data['question'] );
+        if ( isset( $_POST['mtp_tests'] ) && is_array( $_POST['mtp_tests'] ) ) {
+            foreach ( $_POST['mtp_tests'] as $test_data ) {
+                $test_id = ! empty( $test_data['id'] ) ? absint( $test_data['id'] ) : 0;
+                $question = wp_kses_post( $test_data['question'] );
 
-            if ( empty( $question ) ) {
+                if ( empty( $question ) ) {
+                    if ( $test_id ) {
+                        wp_delete_post( $test_id, true );
+                    }
+                    continue;
+                }
+
+                $post_arr = [
+                    'post_title' => wp_trim_words( $question, 10, '...' ),
+                    'post_type' => 'test',
+                    'post_status' => 'publish'
+                ];
+
                 if ( $test_id ) {
-                    wp_delete_post( $test_id, true );
+                    $post_arr['ID'] = $test_id;
+                    wp_update_post( $post_arr );
+                } else {
+                    $test_id = wp_insert_post( $post_arr );
                 }
-                continue;
-            }
 
-            $post_arr = [
-                'post_title' => wp_trim_words( $question, 10, '...' ),
-                'post_type' => 'test',
-                'post_status' => 'publish'
-            ];
+                if ( $test_id ) {
+                    update_post_meta( $test_id, '_topic_id', $post_id );
+                    update_post_meta( $test_id, '_test_identifier', sanitize_text_field( $test_data['identifier'] ) );
+                    update_post_meta( $test_id, '_test_question_number', sanitize_text_field( $test_data['question_number'] ) );
+                    update_post_meta( $test_id, '_test_exam', sanitize_text_field( $test_data['exam'] ) );
+                    update_post_meta( $test_id, '_test_date', sanitize_text_field( $test_data['date'] ) );
+                    update_post_meta( $test_id, '_test_question', $question );
+                    update_post_meta( $test_id, '_test_option1', sanitize_text_field( $test_data['option1'] ) );
+                    update_post_meta( $test_id, '_test_option2', sanitize_text_field( $test_data['option2'] ) );
+                    update_post_meta( $test_id, '_test_option3', sanitize_text_field( $test_data['option3'] ) );
+                    update_post_meta( $test_id, '_test_option4', sanitize_text_field( $test_data['option4'] ) );
 
-            if ( $test_id ) {
-                $post_arr['ID'] = $test_id;
-                wp_update_post( $post_arr );
-            } else {
-                $test_id = wp_insert_post( $post_arr );
-            }
+                    $correct_options_val = '';
+                    if ( isset( $test_data['correct_options'] ) && is_array( $test_data['correct_options'] ) ) {
+                        $correct_options_val = implode( ',', array_map( 'absint', $test_data['correct_options'] ) );
+                    }
+                    update_post_meta( $test_id, '_test_correct_option', $correct_options_val );
 
-            if ( $test_id ) {
-                update_post_meta( $test_id, '_topic_id', $post_id );
-                update_post_meta( $test_id, '_test_identifier', sanitize_text_field( $test_data['identifier'] ) );
-                update_post_meta( $test_id, '_test_question_number', sanitize_text_field( $test_data['question_number'] ) );
-                update_post_meta( $test_id, '_test_exam', sanitize_text_field( $test_data['exam'] ) );
-                update_post_meta( $test_id, '_test_date', sanitize_text_field( $test_data['date'] ) );
-                update_post_meta( $test_id, '_test_question', $question );
-                update_post_meta( $test_id, '_test_option1', sanitize_text_field( $test_data['option1'] ) );
-                update_post_meta( $test_id, '_test_option2', sanitize_text_field( $test_data['option2'] ) );
-                update_post_meta( $test_id, '_test_option3', sanitize_text_field( $test_data['option3'] ) );
-                update_post_meta( $test_id, '_test_option4', sanitize_text_field( $test_data['option4'] ) );
-
-                $correct_options_val = '';
-                if ( isset( $test_data['correct_options'] ) && is_array( $test_data['correct_options'] ) ) {
-                    $correct_options_val = implode( ',', array_map( 'absint', $test_data['correct_options'] ) );
+                    update_post_meta( $test_id, '_test_explanation', wp_kses_post( $test_data['explanation'] ) );
+                    $submitted_ids[] = $test_id;
                 }
-                update_post_meta( $test_id, '_test_correct_option', $correct_options_val );
-
-                update_post_meta( $test_id, '_test_explanation', wp_kses_post( $test_data['explanation'] ) );
-                $submitted_ids[] = $test_id;
             }
         }
 

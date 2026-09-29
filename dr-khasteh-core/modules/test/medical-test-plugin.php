@@ -15,7 +15,6 @@ define( 'MTP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MTP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 require_once MTP_PLUGIN_DIR . 'includes/cpt-init.php';
-require_once MTP_PLUGIN_DIR . 'includes/meta-boxes.php';
 require_once MTP_PLUGIN_DIR . 'includes/admin-columns.php';
 require_once MTP_PLUGIN_DIR . 'includes/admin-filters.php';
 require_once MTP_PLUGIN_DIR . 'includes/import-export.php';
@@ -182,4 +181,3 @@ function mtp_landing_template_redirect() {
     }
 }
 add_action( 'template_redirect', 'mtp_landing_template_redirect', 5 );
-
