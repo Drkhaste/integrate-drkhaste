@@ -11,12 +11,6 @@ define( 'MTP_MODULE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MTP_MODULE_URL', plugin_dir_url( __FILE__ ) );
 
 if ( ! function_exists( 'mtp_register_post_types' ) ) {
-    if ( file_exists( MTP_MODULE_DIR . 'includes/cpt-init.php' ) ) {
-        require_once MTP_MODULE_DIR . 'includes/cpt-init.php';
-    }
-    if ( file_exists( MTP_MODULE_DIR . 'includes/meta-boxes.php' ) ) {
-        require_once MTP_MODULE_DIR . 'includes/meta-boxes.php';
-    }
     if ( file_exists( MTP_MODULE_DIR . 'includes/admin-columns.php' ) ) {
         require_once MTP_MODULE_DIR . 'includes/admin-columns.php';
     }

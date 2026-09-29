@@ -11,8 +11,6 @@ define( 'MCP_MODULE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MCP_MODULE_URL', plugin_dir_url( __FILE__ ) );
 
 if ( ! function_exists( 'mcp_register_post_types' ) ) {
-    require_once MCP_MODULE_DIR . 'includes/cpt-init.php';
-    require_once MCP_MODULE_DIR . 'includes/meta-boxes.php';
     require_once MCP_MODULE_DIR . 'includes/admin-columns.php';
     require_once MCP_MODULE_DIR . 'includes/admin-filters.php';
     require_once MCP_MODULE_DIR . 'includes/hooks.php';

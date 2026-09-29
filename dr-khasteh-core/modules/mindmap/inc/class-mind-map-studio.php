@@ -339,55 +339,6 @@ class Mind_Map_Studio {
 			'high'
 		);
 
-		$slug_post_types = array( self::CPT_COURSE, self::CPT_LESSON, self::CPT_TOPIC );
-		foreach ( $slug_post_types as $post_type ) {
-			add_meta_box(
-				'mms_english_slug_meta_box',
-				__( 'نامک انگلیسی (Slug)', 'mind-map-studio' ),
-				array( __CLASS__, 'render_english_slug_meta_box' ),
-				$post_type,
-				'side'
-			);
-		}
-
-		add_meta_box(
-			'mms_lesson_parent_meta_box',
-			__( 'انتخاب کورس', 'mind-map-studio' ),
-			array( __CLASS__, 'render_lesson_parent_meta_box' ),
-			self::CPT_LESSON,
-			'side'
-		);
-
-		add_meta_box(
-			'mms_topic_course_meta_box',
-			__( 'انتخاب کورس', 'mind-map-studio' ),
-			array( __CLASS__, 'render_topic_course_meta_box' ),
-			self::CPT_TOPIC,
-			'side'
-		);
-		add_meta_box(
-			'mms_topic_lesson_meta_box',
-			__( 'انتخاب درس', 'mind-map-studio' ),
-			array( __CLASS__, 'render_topic_lesson_meta_box' ),
-			self::CPT_TOPIC,
-			'side'
-		);
-
-		add_meta_box(
-			'mms_course_lessons_order_meta_box',
-			__( 'ترتیب درس‌ها', 'mind-map-studio' ),
-			array( __CLASS__, 'render_course_lessons_order_meta_box' ),
-			self::CPT_COURSE,
-			'normal'
-		);
-		add_meta_box(
-			'mms_lesson_topics_order_meta_box',
-			__( 'ترتیب مباحث', 'mind-map-studio' ),
-			array( __CLASS__, 'render_lesson_topics_order_meta_box' ),
-			self::CPT_LESSON,
-			'normal'
-		);
-
 		add_meta_box(
 			'mms_topic_mindmaps_meta_box',
 			__( 'طراحی نقشه‌های ذهنی', 'mind-map-studio' ),
