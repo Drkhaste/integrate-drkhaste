@@ -35,11 +35,6 @@
     function initMap(el) {
         if (el.classList.contains('mms-modal-content')) return;
 
-        el.addEventListener('click', function(e) {
-            if (e.target.closest('jmnode')) return;
-            openModal(el);
-        });
-
         var rawData    = el.getAttribute('data-mindmap-data');
         var layout     = el.getAttribute('data-mindmap-layout') || 'both';
         var lineColor  = el.getAttribute('data-line-color') || '#94a3b8';
@@ -65,6 +60,7 @@
         el.style.height     = '500px';
         el.style.background = 'transparent';
         el.style.display    = 'block';
+        el.style.position   = 'relative';
 
         var jmInst;
         try {
@@ -87,6 +83,7 @@
                 data   : nodes
             });
             enablePinchToZoom(el, jmInst);
+            renderControlButtons(el);
         } catch (e) {
             console.error('[MindMapStudio] render error:', e);
             return;
@@ -95,7 +92,6 @@
         function update() {
             scaleAndCenter(el);
             applyWatermark(el);
-            // Apply node colours
             setTimeout(function() {
                 applyNodeStyles(el, nodeStyles);
                 applyLineStyles(el, nodeStyles, jmInst);
@@ -116,6 +112,54 @@
         } else {
             window.addEventListener('resize', function () { setTimeout(update, 100); });
         }
+    }
+
+    function renderControlButtons(el) {
+        if (el.querySelector('.mms-controls-bar')) return;
+
+        var controls = document.createElement('div');
+        controls.className = 'mms-controls-bar';
+        controls.style.cssText = 'position:absolute;bottom:12px;left:12px;z-index:20;display:flex;gap:6px;background:rgba(255,255,255,0.92);padding:4px 8px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 8px rgba(0,0,0,0.08);';
+
+        var btnZoomIn = document.createElement('button');
+        btnZoomIn.type = 'button';
+        btnZoomIn.innerHTML = '➕';
+        btnZoomIn.title = 'بزرگ‌نمایی';
+        btnZoomIn.style.cssText = 'border:none;background:#f1f5f9;color:#334155;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:14px;';
+        btnZoomIn.onclick = function(e) {
+            e.stopPropagation();
+            var z = parseFloat(el.getAttribute('data-user-zoom') || '1');
+            el.setAttribute('data-user-zoom', (z * 1.25).toString());
+            scaleAndCenter(el);
+        };
+
+        var btnZoomOut = document.createElement('button');
+        btnZoomOut.type = 'button';
+        btnZoomOut.innerHTML = '➖';
+        btnZoomOut.title = 'کوچک‌نمایی';
+        btnZoomOut.style.cssText = 'border:none;background:#f1f5f9;color:#334155;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:14px;';
+        btnZoomOut.onclick = function(e) {
+            e.stopPropagation();
+            var z = parseFloat(el.getAttribute('data-user-zoom') || '1');
+            el.setAttribute('data-user-zoom', (z / 1.25).toString());
+            scaleAndCenter(el);
+        };
+
+        var btnFullscreen = document.createElement('button');
+        btnFullscreen.type = 'button';
+        btnFullscreen.innerHTML = '⛶';
+        btnFullscreen.title = 'حالت تمام صفحه';
+        btnFullscreen.style.cssText = 'border:none;background:#0f766e;color:#fff;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:bold;';
+        btnFullscreen.onclick = function(e) {
+            e.stopPropagation();
+            openModal(el);
+        };
+
+        controls.appendChild(btnZoomIn);
+        controls.appendChild(btnZoomOut);
+        controls.appendChild(btnFullscreen);
+
+        el.appendChild(controls);
     }
 
     /* ── Apply node colours from saved styles ── */
@@ -322,6 +366,7 @@
         });
         jmModal.show({ meta: { name: 'Map' }, format: 'node_array', data: nodes });
         enablePinchToZoom(content, jmModal);
+        renderControlButtons(content);
 
         setTimeout(function() {
             scaleAndCenter(content);

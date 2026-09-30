@@ -202,6 +202,16 @@ function dr_khasteh_core_register_rewrite_rules() {
 }
 add_action( 'init', 'dr_khasteh_core_register_rewrite_rules', 10 );
 
+// Ensure rewrite rules are flushed once when needed
+if ( ! get_option( 'dr_khasteh_core_rewrite_flushed_v1' ) ) {
+    add_action( 'init', function() {
+        dr_khasteh_core_register_post_types();
+        dr_khasteh_core_register_rewrite_rules();
+        flush_rewrite_rules();
+        update_option( 'dr_khasteh_core_rewrite_flushed_v1', 1 );
+    }, 99 );
+}
+
 /**
  * Query Vars
  */
