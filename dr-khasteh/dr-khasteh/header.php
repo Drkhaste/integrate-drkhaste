@@ -41,7 +41,9 @@
             <div class="header-actions">
                 <?php
                 $show_font_settings = false;
-                if ( is_singular() ) {
+                if ( get_query_var( 'mtp_route' ) || get_query_var( 'mtp_landing' ) ) {
+                    $show_font_settings = true;
+                } elseif ( is_singular() ) {
                     $post_id  = get_the_ID();
                     $override = get_post_meta( $post_id, '_dr_khasteh_font_settings_override', true );
 
@@ -51,7 +53,7 @@
                         $show_font_settings = false;
                     } else {
                         // Default logic: check post type settings
-                        $allowed_pts = get_option( 'dr_khasteh_font_settings_post_types', array( 'topic' ) );
+                        $allowed_pts = get_option( 'dr_khasteh_font_settings_post_types', array( 'topic', 'test' ) );
                         if ( in_array( get_post_type( $post_id ), (array) $allowed_pts, true ) ) {
                             $show_font_settings = true;
                         }
