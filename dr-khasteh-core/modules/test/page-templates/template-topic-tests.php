@@ -152,7 +152,7 @@ $tests = get_posts([
                             <div class="mtp-feedback-status"></div>
                             <div class="mtp-explanation-box">
                                 <strong><i class="fa-solid fa-book-open-reader"></i> پاسخ تشریحی:</strong>
-                                <div class="mtp-explanation-content"><?php echo apply_filters( 'the_content', $explanation ); ?></div>
+                                <div class="mtp-explanation-content"><?php echo function_exists( 'dr_khasteh_render_explanation' ) ? dr_khasteh_render_explanation( $explanation ) : apply_filters( 'the_content', $explanation ); ?></div>
                             </div>
                         </div>
                     </div>
