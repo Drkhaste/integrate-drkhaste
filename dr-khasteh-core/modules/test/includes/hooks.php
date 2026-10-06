@@ -51,6 +51,27 @@ add_action( 'before_delete_post', 'mtp_handle_cascading_delete' );
  * @param string $explanation
  * @return string
  */
+if ( ! function_exists( 'dr_khasteh_parse_markdown_inline' ) ) {
+    function dr_khasteh_parse_markdown_inline( $text ) {
+        $text = trim( $text );
+        // Strip markdown headings like ### at start
+        $text = preg_replace( '/^#{1,6}\s*(?:توضیحات?\s*تکمیلی)?[\r\n\s]*/u', '', $text );
+        // Convert **bold**
+        $text = preg_replace( '/\*\*(.*?)\*\*/u', '<strong>$1</strong>', $text );
+        // Convert *italic*
+        $text = preg_replace( '/\*(.*?)\*/u', '<em>$1</em>', $text );
+        // Convert newlines to <br>
+        $text = nl2br( trim( $text ) );
+        return $text;
+    }
+}
+
+/**
+ * Render test explanation with support for Option Analysis tables.
+ *
+ * @param string $explanation
+ * @return string
+ */
 function dr_khasteh_render_explanation( $explanation ) {
     if ( empty( trim( $explanation ) ) ) {
         return '';
@@ -72,10 +93,19 @@ function dr_khasteh_render_explanation( $explanation ) {
         foreach ( $lines as $line ) {
             $line = trim( $line );
             if ( empty( $line ) || strpos( $line, '|' ) === false ) continue;
-            // Skip separator line (e.g. |---|---|---|)
-            if ( preg_match( '/^\|?[\s:\-]+\|[\s:\-]+\|?/u', $line ) ) continue;
 
             $cols = array_map( 'trim', explode( '|', trim( $line, '|' ) ) );
+
+            // Check if separator line
+            $is_separator = true;
+            foreach ( $cols as $col ) {
+                if ( ! preg_match( '/^[\s:\-]+$/u', $col ) ) {
+                    $is_separator = false;
+                    break;
+                }
+            }
+            if ( $is_separator ) continue;
+
             if ( count( $cols ) >= 2 ) {
                 $rows[] = $cols;
             }
@@ -108,9 +138,19 @@ function dr_khasteh_render_explanation( $explanation ) {
                 $raw_opt    = ( $option_idx !== -1 && isset( $row[$option_idx] ) ) ? trim( $row[$option_idx] ) : '';
                 $raw_exp    = isset( $row[$exp_idx] ) ? trim( $row[$exp_idx] ) : '';
 
-                $clean_status = 'incorrect';
                 $status_lower = mb_strtolower( $raw_status );
-                if ( in_array( $status_lower, [ 'correct', 'true', 'صحیح', 'درست', '۱', '1', 'تایید' ], true ) || strpos( $status_lower, 'صحیح' ) !== false || strpos( $status_lower, 'درست' ) !== false ) {
+                $clean_status = 'incorrect';
+
+                if ( in_array( $status_lower, [ 'incorrect', 'false', 'نادرست', 'غلط', 'اشتباه', '۰', '0' ], true )
+                     || strpos( $status_lower, 'incorrect' ) !== false
+                     || strpos( $status_lower, 'نادرست' ) !== false
+                     || strpos( $status_lower, 'غلط' ) !== false
+                     || strpos( $status_lower, 'اشتباه' ) !== false ) {
+                    $clean_status = 'incorrect';
+                } elseif ( in_array( $status_lower, [ 'correct', 'true', 'صحیح', 'درست', '۱', '1', 'تایید' ], true )
+                     || strpos( $status_lower, 'correct' ) !== false
+                     || strpos( $status_lower, 'صحیح' ) !== false
+                     || ( strpos( $status_lower, 'درست' ) !== false && strpos( $status_lower, 'نادرست' ) === false ) ) {
                     $clean_status = 'correct';
                 }
 
@@ -154,7 +194,8 @@ function dr_khasteh_render_explanation( $explanation ) {
                         $opt_str    = ( count( $row ) > 2 && isset( $row[1] ) ) ? trim( $row[1] ) : '';
                         $exp_str    = isset( $row[ count($row) - 1 ] ) ? trim( $row[ count($row) - 1 ] ) : '';
 
-                        $clean_status = ( strpos( mb_strtolower($status_str), 'correct' ) !== false || strpos( mb_strtolower($status_str), 'صحیح' ) !== false ) ? 'correct' : 'incorrect';
+                        $status_lower = mb_strtolower( $status_str );
+                        $clean_status = ( strpos( $status_lower, 'correct' ) !== false || strpos( $status_lower, 'صحیح' ) !== false ) ? 'correct' : 'incorrect';
 
                         $analysis_items[] = [
                             'status'      => $clean_status,
@@ -172,10 +213,16 @@ function dr_khasteh_render_explanation( $explanation ) {
     }
 
     if ( ! $has_table || empty( $analysis_items ) ) {
-        return apply_filters( 'the_content', $explanation );
+        return dr_khasteh_parse_markdown_inline( $explanation );
     }
 
-    // 3. Render Option Analysis Table HTML
+    // Clean up additional explanation
+    if ( ! empty( $additional_explanation ) ) {
+        $additional_explanation = trim( $additional_explanation );
+        $additional_explanation = preg_replace( '/^(?:#+\s*)?توضیحات?\s*تکمیلی:?[\r\n\s]*/u', '', $additional_explanation );
+    }
+
+    // Render Option Analysis HTML
     $roman_numerals = [ 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X' ];
 
     $html = '<div class="mtp-option-analysis-container" style="margin-top: 15px;">';
@@ -191,23 +238,23 @@ function dr_khasteh_render_explanation( $explanation ) {
 
         $html .= '<div class="mtp-analysis-card ' . ( $is_correct ? 'is-correct' : 'is-incorrect' ) . '" style="background: ' . $bg_color . '; border-right: 5px solid ' . $border_color . '; border-radius: 10px; padding: 14px 18px; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,0.02);">';
 
-        // Minimal Roman Numeral Badge in top-left corner (RTL top-left = corner)
+        // Minimal Roman Numeral Badge in top-left corner
         $html .= '<div style="position: absolute; top: 10px; left: 12px; font-weight: 900; font-size: 0.85rem; color: ' . $text_color . '; opacity: 0.75; font-family: monospace;">' . $roman . '.</div>';
 
         if ( ! empty( $item['option'] ) ) {
-            $html .= '<div style="font-weight: 800; font-size: 0.95rem; color: ' . $text_color . '; margin-bottom: 6px; padding-left: 30px;">' . esc_html( $item['option'] ) . '</div>';
+            $html .= '<div style="font-weight: 800; font-size: 0.95rem; color: ' . $text_color . '; margin-bottom: 6px; padding-left: 30px;">' . dr_khasteh_parse_markdown_inline( $item['option'] ) . '</div>';
         }
 
-        $html .= '<div style="font-family: var(--current-font, inherit); font-size: var(--current-font-size, 1rem); line-height: 1.7; color: #1e293b;">' . esc_html( $item['explanation'] ) . '</div>';
+        $html .= '<div style="font-family: var(--current-font, inherit); font-size: var(--current-font-size, 1rem); line-height: 1.7; color: #1e293b;">' . dr_khasteh_parse_markdown_inline( $item['explanation'] ) . '</div>';
         $html .= '</div>';
     }
 
     $html .= '</div>';
 
-    if ( ! empty( $additional_explanation ) ) {
+    if ( ! empty( trim( $additional_explanation ) ) ) {
         $html .= '<div class="mtp-additional-explanation" style="background: var(--bg-card, #ffffff); border: 1px dashed #cbd5e1; border-radius: 10px; padding: 16px 20px; margin-top: 15px;">';
         $html .= '<strong style="display: block; color: var(--primary, #0f766e); margin-bottom: 8px; font-size: 1.05rem;"><i class="fa-solid fa-circle-info"></i> توضیحات تکمیلی:</strong>';
-        $html .= '<div style="font-family: var(--current-font, inherit); font-size: var(--current-font-size, 1rem); line-height: 1.8;">' . apply_filters( 'the_content', $additional_explanation ) . '</div>';
+        $html .= '<div style="font-family: var(--current-font, inherit); font-size: var(--current-font-size, 1rem); line-height: 1.8;">' . dr_khasteh_parse_markdown_inline( $additional_explanation ) . '</div>';
         $html .= '</div>';
     }
 
