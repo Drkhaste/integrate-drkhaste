@@ -222,11 +222,11 @@ function dr_khasteh_render_explanation( $explanation ) {
         $additional_explanation = preg_replace( '/^(?:#+\s*)?توضیحات?\s*تکمیلی:?[\r\n\s]*/u', '', $additional_explanation );
     }
 
-    // Render Option Analysis HTML
+    // Render Compact Option Analysis HTML
     $roman_numerals = [ 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X' ];
 
-    $html = '<div class="mtp-option-analysis-container" style="margin-top: 15px;">';
-    $html .= '<div class="mtp-option-analysis-grid" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">';
+    $html = '<div class="mtp-option-analysis-container" style="margin-top: 8px;">';
+    $html .= '<div class="mtp-option-analysis-grid" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">';
 
     foreach ( $analysis_items as $index => $item ) {
         $roman = isset( $roman_numerals[$index] ) ? $roman_numerals[$index] : ($index + 1);
@@ -236,25 +236,25 @@ function dr_khasteh_render_explanation( $explanation ) {
         $border_color = $is_correct ? '#22c55e' : '#ef4444';
         $text_color   = $is_correct ? '#14532d' : '#991b1b';
 
-        $html .= '<div class="mtp-analysis-card ' . ( $is_correct ? 'is-correct' : 'is-incorrect' ) . '" style="background: ' . $bg_color . '; border-right: 5px solid ' . $border_color . '; border-radius: 10px; padding: 14px 18px; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,0.02);">';
+        $html .= '<div class="mtp-analysis-card ' . ( $is_correct ? 'is-correct' : 'is-incorrect' ) . '" style="background: ' . $bg_color . '; border-right: 3px solid ' . $border_color . '; border-radius: 8px; padding: 8px 12px; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">';
 
         // Minimal Roman Numeral Badge in top-left corner
-        $html .= '<div style="position: absolute; top: 10px; left: 12px; font-weight: 900; font-size: 0.85rem; color: ' . $text_color . '; opacity: 0.75; font-family: monospace;">' . $roman . '.</div>';
+        $html .= '<div style="position: absolute; top: 6px; left: 8px; font-weight: 800; font-size: 0.75rem; color: ' . $text_color . '; opacity: 0.7; font-family: monospace;">' . $roman . '.</div>';
 
         if ( ! empty( $item['option'] ) ) {
-            $html .= '<div style="font-weight: 800; font-size: 0.95rem; color: ' . $text_color . '; margin-bottom: 6px; padding-left: 30px;">' . dr_khasteh_parse_markdown_inline( $item['option'] ) . '</div>';
+            $html .= '<div style="font-weight: 800; font-size: 0.9rem; color: ' . $text_color . '; margin-bottom: 2px; padding-left: 24px;">' . dr_khasteh_parse_markdown_inline( $item['option'] ) . '</div>';
         }
 
-        $html .= '<div style="font-family: var(--current-font, inherit); font-size: var(--current-font-size, 1rem); line-height: 1.7; color: #1e293b;">' . dr_khasteh_parse_markdown_inline( $item['explanation'] ) . '</div>';
+        $html .= '<div style="font-family: var(--current-font, inherit); font-size: var(--current-font-size, 0.95rem); line-height: 1.6; color: #334155;">' . dr_khasteh_parse_markdown_inline( $item['explanation'] ) . '</div>';
         $html .= '</div>';
     }
 
     $html .= '</div>';
 
     if ( ! empty( trim( $additional_explanation ) ) ) {
-        $html .= '<div class="mtp-additional-explanation" style="background: var(--bg-card, #ffffff); border: 1px dashed #cbd5e1; border-radius: 10px; padding: 16px 20px; margin-top: 15px;">';
-        $html .= '<strong style="display: block; color: var(--primary, #0f766e); margin-bottom: 8px; font-size: 1.05rem;"><i class="fa-solid fa-circle-info"></i> توضیحات تکمیلی:</strong>';
-        $html .= '<div style="font-family: var(--current-font, inherit); font-size: var(--current-font-size, 1rem); line-height: 1.8;">' . dr_khasteh_parse_markdown_inline( $additional_explanation ) . '</div>';
+        $html .= '<div class="mtp-additional-explanation" style="background: var(--bg-card, #ffffff); border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-top: 10px;">';
+        $html .= '<strong style="display: block; color: var(--primary, #0f766e); margin-bottom: 4px; font-size: 0.95rem;"><i class="fa-solid fa-circle-info"></i> توضیحات تکمیلی:</strong>';
+        $html .= '<div style="font-family: var(--current-font, inherit); font-size: var(--current-font-size, 0.95rem); line-height: 1.7; color: #334155;">' . dr_khasteh_parse_markdown_inline( $additional_explanation ) . '</div>';
         $html .= '</div>';
     }
 

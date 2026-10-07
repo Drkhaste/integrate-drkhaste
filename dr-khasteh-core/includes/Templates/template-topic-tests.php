@@ -195,19 +195,19 @@ $tests = get_posts([
 .mtp-quiz-wrapper {
     background: var(--bg-card, #ffffff);
     border: 1px solid var(--primary, #0f766e);
-    border-radius: 16px;
-    padding: 30px;
-    margin-bottom: 40px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
     position: relative;
 }
 
 /* Progress Bar Styles */
 .mtp-progress-bar-container {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     background: var(--bg-body, #f8fafc);
-    padding: 15px 20px;
-    border-radius: 12px;
+    padding: 10px 15px;
+    border-radius: 10px;
     border: 1px solid #e2e8f0;
 }
 .mtp-progress-info {
@@ -353,28 +353,28 @@ $tests = get_posts([
 /* Question & Option Styles with Theme Font Binding */
 .test-question {
     font-family: var(--current-font, inherit);
-    font-size: calc(var(--current-font-size, 16px) * 1.15);
-    line-height: 1.8;
-    margin-bottom: 30px;
+    font-size: calc(var(--current-font-size, 16px) * 1.1);
+    line-height: 1.7;
+    margin-bottom: 18px;
     color: var(--text-main, #1e293b);
     font-weight: 600;
 }
 .q-label {
     color: var(--primary, #0f766e);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-weight: 900;
-    font-size: 1.1em;
+    font-size: 1.05em;
 }
 
 .mtp-test-meta-bar {
     display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
     color: #64748b;
     background: rgba(0,0,0,0.02);
-    padding: 10px 14px;
-    border-radius: 10px;
+    padding: 6px 12px;
+    border-radius: 8px;
     flex-wrap: wrap;
     border: 1px solid #f1f5f9;
 }
@@ -382,8 +382,8 @@ $tests = get_posts([
 .mtp-vertical-options {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 35px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .mtp-option-label {
@@ -396,35 +396,35 @@ $tests = get_posts([
     display: flex;
     align-items: center;
     background: var(--bg-body, #f8fafc);
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 16px 20px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
     transition: all 0.2s ease;
 }
 
 .mtp-option-letter {
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     background: #ffffff;
     border: 1px solid #cbd5e1;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    margin-left: 18px;
+    border-radius: 6px;
+    margin-left: 14px;
     font-weight: 900;
     color: var(--text-main, #1e293b);
     flex-shrink: 0;
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: all 0.2s ease;
 }
 
 .mtp-option-text {
     font-family: var(--current-font, inherit);
-    font-size: var(--current-font-size, 1.05rem);
+    font-size: var(--current-font-size, 1rem);
     font-weight: 600;
     color: var(--text-main, #1e293b);
-    line-height: 1.7;
+    line-height: 1.6;
 }
 
 .mtp-option-label:hover .mtp-option-box {
@@ -435,7 +435,7 @@ $tests = get_posts([
 .mtp-option-label input:checked + .mtp-option-box {
     border-color: var(--primary, #0f766e);
     background: rgba(15, 118, 110, 0.06);
-    box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.15);
+    box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.12);
 }
 
 .mtp-option-label input:checked + .mtp-option-box .mtp-option-letter {
@@ -445,40 +445,40 @@ $tests = get_posts([
 }
 
 .mtp-actions {
-    margin-bottom: 25px;
+    margin-bottom: 16px;
 }
 
 .btn-mtp-check {
     background-color: var(--primary, #0f766e);
     color: white;
     border: none;
-    padding: 13px 36px;
-    border-radius: 12px;
+    padding: 10px 28px;
+    border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
     font-family: inherit;
-    transition: all 0.3s ease;
-    font-size: 1rem;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
-.btn-mtp-check:hover { filter: brightness(110%); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2); }
+.btn-mtp-check:hover { filter: brightness(110%); transform: translateY(-1px); }
 
 .mtp-feedback-area {
-    margin-top: 25px;
-    padding: 25px;
-    border-radius: 12px;
+    margin-top: 14px;
+    padding: 14px 18px;
+    border-radius: 10px;
     background: var(--bg-body, #f8fafc);
-    border-right: 6px solid #64748b;
+    border-right: 4px solid #64748b;
     animation: fadeIn 0.3s ease;
 }
 
 .mtp-feedback-status {
     font-weight: 900;
-    margin-bottom: 15px;
-    font-size: 1.15rem;
+    margin-bottom: 10px;
+    font-size: 1.05rem;
 }
 
 .mtp-feedback-status.correct { color: #22c55e; }
@@ -501,8 +501,8 @@ $tests = get_posts([
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 40px;
-    padding-top: 25px;
+    margin-top: 20px;
+    padding-top: 15px;
     border-top: 1px solid #e2e8f0;
 }
 
